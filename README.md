@@ -23,7 +23,7 @@
       </ul>
     </li>
     <li>
-    <a href="#usage">Usage</a>
+      <a href="#usage">Usage</a>
       <ul>
         <li>
             <a href="#graphset">GraphSet</a>
@@ -47,6 +47,9 @@
             </ul>
         </li>
       </ul>
+    </li>
+    <li>
+      <a href="#example">Example</a>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
@@ -158,7 +161,7 @@ When using the GraphSet you must keep in mind that while you don't call any buil
 To trigger the request you must use one of these aggregators defined above or those available through Linq extension methods.
 <br/>
 As soon as you call these aggregators the result will be stored in memory and other Linq extension methods will be available.
-Any Linq method not supported and defined above will be skipped by the engine
+Any Linq non-aggregator methods not supported and defined above will be skipped by the server-side engine and executed in-memory on the resulting IEnumerable.
 
 ````cs
 IQueryable<User.User> query = testContext.User()
@@ -192,7 +195,227 @@ This context is used to define every request you can use on a GraphQL API.
 This is also were you can register GraphSet configuration classes inside a specific method named ``Configure`` (which is a protected virtual void to be overrided if needed by the Context)
 
 ### GraphSet Construction
+To construct a GraphSet, there's a method Set<T> in the GraphContext which returns a GraphSet<T>.
+This method takes 2 arguments:
+- parameterValues: The base input parameters of the query/mutation to apply
+- graphSetConfigurationAction: A configuration builder used to extend the base configuration of the requested Set or to create it without calling ConfigureSet in the Configure method
 
+Here's an example of the Set method:
+`````cs
+[GraphPropertyName("countries")]
+public GraphSet<Country.Query.Country> Countries(string authorization)
+{
+    return Set<Country.Query.Country>(Array.Empty<object>(), builder =>
+    {
+        builder.ConfigureHttp(httpBuilder =>
+        {
+            httpBuilder.ConfigureHeaders(headers =>
+            {
+                headers.Authorization = new AuthenticationHeaderValue("Bearer", authorization);
+            });
+        });
+    });
+}
+`````
+
+### GraphSet Configuration
+In order to configure the behavior of a GraphSet, you have two possibilities:
+- The first one is to use the graphSetConfigurationAction variable to build an entire configuration/replace some base configurations to a particular request (ie: if you have two endpoints which results in the same entity (so the same GraphSet) but one requires an authorization token, you can register it using this variable)
+- The second one is to call override the Configure method in your GraphContext definition and make a call to ConfigureSet<T>() which also takes a GraphConfigurationBuilder as a variable to build the set configuration
+
+Here's a full combination of both possibilities: 
+````cs
+[GraphPropertyName("countries")]
+public GraphSet<Country.Query.Country> Countries(string authorization)
+{
+    return Set<Country.Query.Country>(Array.Empty<object>(), builder =>
+    {
+        // Can also be called here - will replace the base value defined in Configure
+        builder.WithUrl("secondUrl");
+    
+        builder.ConfigureHttp(httpBuilder =>
+        {
+            httpBuilder.ConfigureHeaders(headers =>
+            {
+                headers.Authorization = new AuthenticationHeaderValue("Bearer", authorization);
+            });
+        });
+    });
+}
+
+protected override void Configure(GraphContextConfigureOptionsBuilder graphContextConfigureOptionsBuilder)
+{
+    graphContextConfigureOptionsBuilder.ConfigureSet<Country.Query.Country>(builder =>
+    {
+        builder.WithUrl("url");
+
+        builder.ConfigureHttp(httpBuilder =>
+        {
+            httpBuilder.WithMethod(HttpMethod.Post);
+        });
+    });
+
+}
+````
+
+<!-- Attributes -->
+## Attributes
+In order to have a full control of how the query is translated by the engine, there's actually two Graph attributes which you can use to modify the behavior of the engine.
+These attributes have the ability to be used on Entity definitions, Context method definitions and input definitions.
+
+### GraphPropertyName
+This attribute can be used to configure the name of the member translated into the query.
+It takes a name argument which is a string.
+
+````cs
+[GraphPropertyName("countries")]
+public void Countries() {
+}
+````
+
+Will be translated to:
+`query { countries {  } }` instead of `query { Countries {  } }`
+
+Another example this time with inputs:
+`````cs
+public void Countries([GraphPropertyName("inputA")] string a) {}
+`````
+
+Will be translated to:
+`query { Countries(inputA: $a) {  } }` instead of `query { Countries(a: $a) {  } }`
+
+### GraphPropertyNameBehavior
+This attribute now can be used to configure the way the name will be displayed into the query. 
+It takes a propertyBehavior which is an Enum of TranslatorBehavior:
+- CamelCase: This behavior will display the name in camelCase
+- UpperCase: This behavior will display the name in UPPERCASE
+- LowerCase: This behavior will display the name in lowercase
+
+````cs
+[GraphPropertyNameBehavior(TranslatorBehavior.UpperCase)]
+public void Countries() {
+}
+````
+
+Will be translated to:
+`query { COUNTRIES {  } }` instead of `query { Countries { } }`
+
+### GraphNonNullableProperty
+This attribute can be used only on method properties as it acts as a Non-nullable type indicator.
+
+````
+public void Countries([GraphNonNullableProperty] int countryId) {
+}
+````
+
+Will be translated to `query (countryUuid:Int!) { Countries {  } }` instead of `query (countryUuid: Int) { Countries { } }`
+
+<!-- Example -->
+## Example
+Here's a full example (accessible in the example folder) of an Entity definition and his translation by the query engine:
+
+Here's the entities definitions:
+````cs
+public class User
+{
+    [GraphPropertyName("name")]
+    public string Name { get; set; }
+    
+    [GraphPropertyName("username")]
+    public string Username { get; set; }
+
+    [GraphPropertyName("posts")]
+    public List<Post.Post> Posts([GraphNonNullableProperty] [GraphPropertyName("postsId")] int id) => new List<Post.Post>();
+    
+    [GraphPropertyName("comments")]
+    public List<Comment.Comment> Comments { get; set; }
+}
+
+public class Post
+{
+    [GraphPropertyName("title")]
+    public string Title { get; set; }
+    
+    [GraphPropertyName("content")]
+    public string Content { get; set; }
+
+    [GraphPropertyName("comments")]
+    public List<Comment.Comment> Comments([GraphPropertyName("commentsId")] int id) => new List<Comment.Comment>();
+}
+
+public class Comment
+{
+    [GraphPropertyName("title")]
+    public string Title { get; set; }
+    
+    [GraphPropertyName("content")]
+    public string Content { get; set; }
+}
+````
+
+And the context definition:
+````cs
+public class UserContext : GraphContext
+{
+    [GraphPropertyName("user")]
+    [GraphPropertyNameBehavior(TranslatorBehavior.UpperCase)]
+    public GraphSet<User.User> User([GraphNonNullableProperty] string username)
+    {
+        return Set<User.User>(new object[]
+        {
+            username
+        }, builder =>
+        {
+            builder.ConfigureQuery(queryBuilder =>
+            {
+                queryBuilder.WithType(GraphSetTypes.Query);
+            });
+        }); 
+    }
+
+    protected override void Configure(GraphContextConfigureOptionsBuilder graphContextConfigureOptionsBuilder)
+    {
+        graphContextConfigureOptionsBuilder.ConfigureSet<User.User>(builder =>
+        {
+            builder.WithUrl("https://example.com/graphql");
+
+            builder.ConfigureHttp(httpBuilder =>
+            {
+                httpBuilder.WithMethod(HttpMethod.Post);
+            });
+        });
+    }
+}
+````
+
+Now that we defined the entities & the context we can create our query:
+````cs
+var userContext = new UserContext();
+
+IQueryable<User.User> userQuery = userContext.User("username")
+    .Select(e => new User.User
+    {
+        Name = e.Name,
+        Username = e.Username
+    })
+    .Include(e => e.Posts(10))
+        .Select(e => new Post.Post()
+        {
+            Content = e.Content,
+            Title = e.Title
+        })
+        .ThenInclude(e => e.Comments(10))
+            .Select(e => new Comment.Comment
+            {
+                Content = e.Content,
+                Title = e.Title
+            });
+
+var user = userQuery.ToItem();
+````
+
+This query once executed using the aggregator ToItem will be translated to: 
+`{"query":"query ($username:String!, $postsId:Int!, $postsCommentsId:Int){ result: USER(username:$username) { name, username, posts(postsId:$postsId) { content, title, comments(commentsId:$postsCommentsId) { content, title } } } }","variables":{"username":"username","postsId":10,"postsCommentsId":10}}`
 
 <!-- ROADMAP -->
 ## Roadmap
@@ -209,7 +432,6 @@ Contributions are what make the open source community such an amazing place to b
 3. Commit your Changes depending on [Conventional Commit]("https://www.conventionalcommits.org/en/v1.0.0/") spec (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
 
 <!-- LICENSE -->
 ## License
