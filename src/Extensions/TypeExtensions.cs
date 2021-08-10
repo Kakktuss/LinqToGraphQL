@@ -26,6 +26,11 @@ namespace Client.Extensions
 				return "Float";
 			}
 
+			if (type == typeof(Guid))
+			{
+				return "Uuid";
+			}
+
 			return type.Name;
 		}
 	}
