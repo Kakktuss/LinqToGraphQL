@@ -20,42 +20,41 @@ namespace Client.Reader
 		
 		public async IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = new CancellationToken())
 		{
-			using (var httpResponseMessage = await _httpResponseMessage)
+			var httpResponseMessage = await _httpResponseMessage;
+			
+			if (httpResponseMessage.IsSuccessStatusCode)
 			{
-				if (httpResponseMessage.IsSuccessStatusCode)
+				using (var jsonDocument = await JsonDocument.ParseAsync(await httpResponseMessage.Content.ReadAsStreamAsync(cancellationToken), new JsonDocumentOptions(), cancellationToken))
 				{
-					using (var jsonDocument = await JsonDocument.ParseAsync(await httpResponseMessage.Content.ReadAsStreamAsync(cancellationToken), new JsonDocumentOptions(), cancellationToken))
+					if (jsonDocument.RootElement.TryGetProperty("errors", out var errorElement))
 					{
-						if (jsonDocument.RootElement.TryGetProperty("errors", out var errorElement))
-						{
-							throw new GraphQueryExecutionException(System.Text.Json.JsonSerializer.Deserialize<List<GraphQueryError>>(errorElement.GetRawText()));
-						}
+						throw new GraphQueryExecutionException(System.Text.Json.JsonSerializer.Deserialize<List<GraphQueryError>>(errorElement.GetRawText()));
+					}
 
-						if (jsonDocument.RootElement.TryGetProperty("data", out var enumerableElement))
+					if (jsonDocument.RootElement.TryGetProperty("data", out var enumerableElement))
+					{
+						if (enumerableElement.TryGetProperty("result", out var enumerableResultElement))
 						{
-							if (enumerableElement.TryGetProperty("result", out var enumerableResultElement))
+							var text = enumerableResultElement.GetRawText();
+
+							List<T> elements = new();
+
+							if (JsonSerializerExtensions.TryDeserialize(text, out List<T> deserializedEnumerableElements))
 							{
-								var text = enumerableResultElement.GetRawText();
-
-								List<T> elements = new();
-
-								if (JsonSerializerExtensions.TryDeserialize(text, out List<T> deserializedEnumerableElements))
+								foreach (var deserializedItem in deserializedEnumerableElements)
 								{
-									foreach (var deserializedItem in deserializedEnumerableElements)
-									{
-										yield return deserializedItem;
-									}
-								} else if (JsonSerializerExtensions.TryDeserialize(text, out T deserializedItemElement))
-								{
-									yield return deserializedItemElement;
+									yield return deserializedItem;
 								}
+							} else if (JsonSerializerExtensions.TryDeserialize(text, out T deserializedItemElement))
+							{
+								yield return deserializedItemElement;
 							}
 						}
 					}
 				}
-
-				// throw new GraphQueryExecutionException();	
 			}
+
+			throw new GraphRequestExecutionException(httpResponseMessage);	
 		}
 	}
 }
