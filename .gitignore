@@ -2,3 +2,6 @@ bin/
 obj/
 
 .idea
+
+src/bin
+src/obj
