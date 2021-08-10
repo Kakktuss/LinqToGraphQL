@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using Client.Attributes;
 using Client.Client;
@@ -86,10 +87,17 @@ namespace Client.Context
 
         protected virtual void Configure(GraphContextConfigureOptionsBuilder graphContextConfigureOptionsBuilder) { }
 
-        private Dictionary<string, object> BuildSetCallerArgumentsDictionnary(object[] parameterValues, string queryName)
+        private Dictionary<string, Tuple<ParameterInfo, object>> BuildSetCallerArgumentsDictionnary(object[] parameterValues, string queryName)
         {
             var parameters = GetType().GetMethod(queryName).GetParameters();
-            var arguments = parameters.Zip(parameterValues, (info, value) => new { info.Name, Value = value }).ToDictionary(arg => arg.Name, arg => arg.Value);
+            var arguments = parameters.Zip(parameterValues, (info, value) =>
+            {
+                return new
+                {
+                    info.Name,
+                    Value = new Tuple<ParameterInfo, object>(info, value)
+                };
+            }).ToDictionary(arg => arg.Name, arg => arg.Value);
             return arguments;
         }
     }

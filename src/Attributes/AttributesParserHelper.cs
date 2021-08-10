@@ -40,13 +40,13 @@ namespace Client.Attributes
             var graphNameAttribute = parameterInfo.CustomAttributes.FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyNameAttribute));
 
             var graphNameTranslatorBehaviorAttribute = parameterInfo.CustomAttributes.FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyNameBehaviorAttribute));
-							
-            if (graphNameAttribute != null)
+            
+            if (graphNameAttribute is not null)
             {
                 nodeName = (string) graphNameAttribute.ConstructorArguments.FirstOrDefault().Value;
             }
 
-            if (graphNameTranslatorBehaviorAttribute != null)
+            if (graphNameTranslatorBehaviorAttribute is not null)
             {
                 var graphNameTranslatorBehavior = (TranslatorBehavior) graphNameTranslatorBehaviorAttribute.ConstructorArguments.FirstOrDefault().Value;
 
@@ -63,12 +63,22 @@ namespace Client.Attributes
             }
         }
         
+        internal static void CheckMethodParameterTypeAttributes(ref string type, ParameterInfo parameterInfo)
+        {
+            var graphNonNullablePropertyAttribute = parameterInfo.CustomAttributes.FirstOrDefault(e => e.AttributeType == typeof(GraphNonNullablePropertyAttribute));
+            
+            if (graphNonNullablePropertyAttribute is not null)
+            {
+                type = $"{type}!";
+            }
+        }
+
         internal static void CheckPropertyNameAttributes(ref string nodeName, PropertyInfo propertyInfo)
         {
             var graphNameAttribute = propertyInfo.CustomAttributes.FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyNameAttribute));
 
             var graphNameTranslatorBehaviorAttribute = propertyInfo.CustomAttributes.FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyNameBehaviorAttribute));
-							
+            
             if (graphNameAttribute != null)
             {
                 nodeName = (string) graphNameAttribute.ConstructorArguments.FirstOrDefault().Value;
@@ -90,5 +100,5 @@ namespace Client.Attributes
                 }
             }
         }
-	}
+    }
 }

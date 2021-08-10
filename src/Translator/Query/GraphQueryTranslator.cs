@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Client.Attributes;
@@ -46,13 +47,13 @@ namespace Client.Translator.Query
             {
                 queryInputs += "(";
                 
-                foreach (((var queryArgumentName, var queryArgumentValue), var queryArgumentIndex) in graphSetQueryConfiguration.Arguments.Select((item, index) => (item, index)))
+                foreach (((var queryArgumentName, (var queryArgumentPropertyInfo, var queryArgumentValue)), var queryArgumentIndex) in graphSetQueryConfiguration.Arguments.Select((item, index) => (item, index)))
                 {
                     var inputName = $"{queryArgumentName}";
 
                     queryInputs += $"{inputName}:${inputName}{(queryArgumentIndex != graphSetQueryConfiguration.Arguments.Count - 1 ? ", " : "")}";
                 
-                    _inputs.Add(inputName, new InputDetail(inputName, queryArgumentValue.GetType(), queryArgumentName, queryArgumentValue));
+                    _inputs.Add(inputName, new InputDetail(inputName, queryArgumentValue.GetType(), queryArgumentName, queryArgumentValue, queryArgumentPropertyInfo));
                 }
                 
                 queryInputs += ")";
@@ -67,8 +68,11 @@ namespace Client.Translator.Query
                 variableDefinitions += "(";
                 foreach (((string inputName, InputDetail inputDetail), var inputArgumentIndex) in _inputs.Select((item, index) => (item, index)))
                 {
-
-                    variableDefinitions += $"${inputName}:{inputDetail.Type.ToGraphQlType()}{(inputArgumentIndex != _inputs.Count - 1 ? ", " : "")}";
+                    var inputDetailType = inputDetail.Type.ToGraphQlType();
+                    
+                    AttributesParserHelper.CheckMethodParameterTypeAttributes(ref inputDetailType, inputDetail.Parameter);
+                    
+                    variableDefinitions += $"${inputName}:{inputDetailType}{(inputArgumentIndex != _inputs.Count - 1 ? ", " : "")}";
 
                 }
                 variableDefinitions += ")";
