@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Client.Set.Configuration
 {
@@ -13,7 +15,7 @@ namespace Client.Set.Configuration
 		
 		internal string Name { get; set; }
 		
-		internal Dictionary<string, object> Arguments { get; set; }
+		internal Dictionary<string, Tuple<ParameterInfo, object>> Arguments { get; set; }
 		
 		internal GraphSetTypes Type { get; set; }
 	}

@@ -30,5 +30,10 @@ namespace Client.Set.Select
 		public Type ElementType => _queryable.ElementType;
 		public Expression Expression => _queryable.Expression;
 		public IQueryProvider Provider => _queryable.Provider;
+		
+		public override string ToString()
+		{
+			return _queryable.ToString();
+		}
 	}
 }

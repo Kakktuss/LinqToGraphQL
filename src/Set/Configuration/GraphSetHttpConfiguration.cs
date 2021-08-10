@@ -14,7 +14,7 @@ namespace Client.Set.Configuration
 				headers = new HttpRequestMessage().Headers;
 			}
 			
-			Headers = new HttpRequestMessage().Headers;
+			Headers = headers;
 
 			if (method is null)
 			{

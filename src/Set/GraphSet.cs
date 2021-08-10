@@ -75,5 +75,10 @@ namespace Client.Set
 				return _provider;
 			}
 		}
+
+		public override string ToString()
+		{
+			return _provider.GetQueryText(Expression);
+		}
 	}
 }
