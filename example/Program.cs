@@ -11,7 +11,7 @@ namespace TestClient
 		{
 			var userContext = new UserContext();
 
-			IQueryable<User.User> userQuery = userContext.User("username")
+			IQueryable<User.User> userQuery = userContext.User(Guid.NewGuid())
 				.Select(e => new User.User
 				{
 					Name = e.Name,

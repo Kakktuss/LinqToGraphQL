@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using Client.Attributes;
 using Client.Context;
@@ -13,7 +14,7 @@ namespace TestClient
 	{
 		[GraphPropertyName("user")]
 		[GraphPropertyNameBehavior(TranslatorBehavior.UpperCase)]
-		public GraphSet<User.User> User([GraphNonNullableProperty] string username)
+		public GraphSet<User.User> User([GraphNonNullableProperty] Guid username)
 		{
 			return Set<User.User>(new object[]
 			{
