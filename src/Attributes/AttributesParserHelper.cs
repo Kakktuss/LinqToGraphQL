@@ -78,7 +78,7 @@ namespace LinqToGraphQL.Attributes
             var graphNameAttribute = propertyInfo.CustomAttributes.FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyNameAttribute));
 
             var graphNameTranslatorBehaviorAttribute = propertyInfo.CustomAttributes.FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyNameBehaviorAttribute));
-            
+
             if (graphNameAttribute != null)
             {
                 nodeName = (string) graphNameAttribute.ConstructorArguments.FirstOrDefault().Value;

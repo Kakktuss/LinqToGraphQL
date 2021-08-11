@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace LinqToGraphQL.Types
 {
@@ -49,6 +50,32 @@ namespace LinqToGraphQL.Types
 
 			return null;
 		}
+		
+		public static bool TryCast<T>(object obj, out T result)
+		{
+			result = default(T);
+			if (obj is T)
+			{
+				result = (T)obj;
+				return true;
+			}
+
+			// If it's null, we can't get the type.
+			if (obj != null)
+			{
+				var converter = TypeDescriptor.GetConverter(typeof (T));
+				if(converter.CanConvertFrom(obj.GetType()))
+					result = (T) converter.ConvertFrom(obj);
+				else
+					return false;
+
+				return true;
+			}
+
+			//Be permissive if the object was null and the target is a ref-type
+			return !typeof(T).IsValueType; 
+		}
+
 
 	}
 }

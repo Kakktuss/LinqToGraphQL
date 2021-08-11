@@ -13,15 +13,15 @@
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
         <Description>Strongly typed GraphQL queries and mutations requests for IQueryable and Linq lovers.</Description>
-        <Version>1.0.1</Version>
+        <Version>1.1.1</Version>
         <PackageId>LinqToGraphQL</PackageId>
         <PackageTags>GraphQL LINQ json api</PackageTags>
         <RootNamespace>LinqToGraphQL</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="HttpClientFactoryLite" Version="0.4.0"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2"/>
-        <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0"/>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+        <PackageReference Include="HttpClientFactoryLite" Version="0.4.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 </Project>

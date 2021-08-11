@@ -10,6 +10,8 @@ namespace LinqToGraphQL.Reader
 {
 	public class AsyncGraphObjectReader<T> : IAsyncEnumerable<T>
 	{
+		private readonly List<T> _items;
+
 		private readonly Task<HttpResponseMessage> _httpResponseMessage;
 		
 		internal AsyncGraphObjectReader(Task<HttpResponseMessage> httpResponseMessage)
@@ -50,10 +52,10 @@ namespace LinqToGraphQL.Reader
 						}
 					}
 				}
-				
+			} else
+			{
+				throw new GraphRequestExecutionException(httpResponseMessage);
 			}
-
-			throw new GraphRequestExecutionException(httpResponseMessage);	
 		}
 	}
 }
