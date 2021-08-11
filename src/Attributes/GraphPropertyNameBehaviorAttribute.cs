@@ -1,7 +1,7 @@
 ﻿using System;
-using Client.Translator.Behavior;
+using LinqToGraphQL.Translator.Behavior;
 
-namespace Client.Attributes
+namespace LinqToGraphQL.Attributes
 {
 	[AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Property, AllowMultiple = false)]
 	public sealed class GraphPropertyNameBehaviorAttribute : Attribute

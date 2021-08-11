@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Client.Extensions;
+using LinqToGraphQL.Exceptions;
+using LinqToGraphQL.Extensions;
 
-namespace Client.Reader
+namespace LinqToGraphQL.Reader
 {
 	public class AsyncGraphObjectReader<T> : IAsyncEnumerable<T>
 	{

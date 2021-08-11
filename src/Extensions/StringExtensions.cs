@@ -1,4 +1,4 @@
-﻿namespace Client.Extensions
+﻿namespace LinqToGraphQL.Extensions
 {
 	public static class StringExtensions
 	{

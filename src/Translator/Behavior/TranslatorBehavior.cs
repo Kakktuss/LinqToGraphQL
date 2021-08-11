@@ -1,4 +1,4 @@
-﻿namespace Client.Translator.Behavior
+﻿namespace LinqToGraphQL.Translator.Behavior
 {
 	public enum TranslatorBehavior
 	{

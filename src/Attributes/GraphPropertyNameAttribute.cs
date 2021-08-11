@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace Client.Attributes
+namespace LinqToGraphQL.Attributes
 {
 	[AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Property, AllowMultiple = false)]
 	public sealed class GraphPropertyNameAttribute : JsonAttribute

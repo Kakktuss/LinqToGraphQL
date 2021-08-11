@@ -1,4 +1,4 @@
-﻿namespace Client.Parameters
+﻿namespace LinqToGraphQL.Parameters
 {
 	public class GraphProviderParameters
 	{

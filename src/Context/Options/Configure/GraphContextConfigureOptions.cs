@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Client.Set.Configuration;
+using LinqToGraphQL.Set.Configuration;
 
-namespace Client.Context.Options.Configure
+namespace LinqToGraphQL.Context.Options.Configure
 {
 	public class GraphContextConfigureOptions
 	{

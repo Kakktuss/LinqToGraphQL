@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Client.Extensions
+namespace LinqToGraphQL.Extensions
 {
 	public static class TypeExtensions
 	{

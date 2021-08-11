@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Client.Extensions
+namespace LinqToGraphQL.Extensions
 {
 	public static class QueryableExtensions
 	{

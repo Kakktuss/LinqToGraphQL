@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Client.Set.Configuration
+namespace LinqToGraphQL.Set.Configuration
 {
 	public class GraphSetConfiguration : ICloneable
 	{

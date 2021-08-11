@@ -3,13 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Threading;
-using Client.Extensions;
-using Client.Provider;
-using Client.Set.Select;
 
-namespace Client.Set.Include
+namespace LinqToGraphQL.Set.Include
 {
 	public class IncludableQueryable<TEntity, TProperty> : IIncludableQueryable<TEntity, TProperty>
 	{

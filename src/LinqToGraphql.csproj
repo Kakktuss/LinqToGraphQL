@@ -6,27 +6,18 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageOutputPath>./../output</PackageOutputPath>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/Giorgi/GraphQLinq/</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Giorgi/GraphQLinq/</RepositoryUrl>
-
-    <Deterministic>true</Deterministic>
-    <ContinuousIntegrationBuild Condition="'$(Configuration)'=='Release'">True</ContinuousIntegrationBuild>
-
+    <PackageProjectUrl>https://github.com/Kakktuss/LinqToGraphQL/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Kakktuss/LinqToGraphQL/</RepositoryUrl>
+    
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <PackageIcon>Icon.png</PackageIcon>
-    <PackageReadmeFile>README-NuGet.md</PackageReadmeFile>
-    <Description>Strongly typed GraphQL queries with LINQ query syntax.</Description>
-    <Version>1.0.1-beta</Version>
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
-    <FileVersion>1.0.0.1</FileVersion>
-    <PackageId>GraphQLinq.Client</PackageId>
-    <Product>GraphQLinq.Client</Product>
+    <Description>Strongly typed GraphQL queries and mutations requests for IQueryable and Linq lovers.</Description>
+    <Version>1.0.1</Version>
+    <PackageId>LinqToGraphQL</PackageId>
     <PackageTags>GraphQL LINQ json api</PackageTags>
-    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
-    <RootNamespace>Client</RootNamespace>
+    <RootNamespace>LinqToGraphQL</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="HttpClientFactoryLite" Version="0.4.0" />

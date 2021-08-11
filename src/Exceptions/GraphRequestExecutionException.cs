@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 
-namespace Client
+namespace LinqToGraphQL.Exceptions
 {
 	public class GraphRequestExecutionException : Exception
 	{

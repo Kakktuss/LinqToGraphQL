@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Client.Context.Options.Configure;
-using Client.Set.Configuration;
-using Client.Set.Configuration.Builder;
+using LinqToGraphQL.Context.Options.Configure;
+using LinqToGraphQL.Set.Configuration;
+using LinqToGraphQL.Set.Configuration.Builder;
 
-namespace Client.Context.Options.Builder.Configure
+namespace LinqToGraphQL.Context.Options.Builder.Configure
 {
 	public class GraphContextConfigureOptionsBuilder
 	{

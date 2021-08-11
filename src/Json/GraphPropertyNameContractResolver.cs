@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
-using Client.Attributes;
+using LinqToGraphQL.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Client.Json
+namespace LinqToGraphQL.Json
 {
 	public class GraphPropertyNameContractResolver : DefaultContractResolver
 	{

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
-using Client.Provider;
+using LinqToGraphQL.Provider;
 
-namespace Client.Set
+namespace LinqToGraphQL.Set
 {
 	public class GraphSet<T> : IQueryable<T>, IAsyncEnumerable<T>
 	{

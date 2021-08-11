@@ -1,7 +1,7 @@
 ﻿using System;
 using HttpClientFactoryLite;
 
-namespace Client.Client
+namespace LinqToGraphQL.Client
 {
 	public class ClientFactorySingleton
 	{

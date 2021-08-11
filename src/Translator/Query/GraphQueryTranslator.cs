@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Client.Attributes;
-using Client.Extensions;
-using Client.Set.Configuration;
-using Client.Translator.Details;
+using LinqToGraphQL.Attributes;
+using LinqToGraphQL.Extensions;
+using LinqToGraphQL.Set.Configuration;
+using LinqToGraphQL.Translator.Details;
 
-namespace Client.Translator.Query
+namespace LinqToGraphQL.Translator.Query
 {
     public class GraphQueryTranslator
     {

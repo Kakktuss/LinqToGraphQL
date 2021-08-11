@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 
-namespace Client.Set.Select
+namespace LinqToGraphQL.Set.Select
 {
 	public class SelectableQueryable<TEntity, TProperty> : ISelectableQueryable<TEntity, TProperty>
 	{

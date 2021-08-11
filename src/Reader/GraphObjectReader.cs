@@ -1,13 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Text.Json;
-using Client.Extensions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using LinqToGraphQL.Exceptions;
+using LinqToGraphQL.Extensions;
 
-namespace Client.Reader
+namespace LinqToGraphQL.Reader
 {
 	public class GraphObjectReader<T> : IEnumerable<T>
 	{

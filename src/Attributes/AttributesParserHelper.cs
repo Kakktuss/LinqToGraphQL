@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Reflection;
-using Client.Extensions;
-using Client.Translator.Behavior;
+using LinqToGraphQL.Extensions;
+using LinqToGraphQL.Translator.Behavior;
 
-namespace Client.Attributes
+namespace LinqToGraphQL.Attributes
 {
 	public class AttributesParserHelper
 	{

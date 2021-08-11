@@ -6,14 +6,14 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Client.Reader;
-using Client.Set;
-using Client.Set.Configuration;
-using Client.Translator.Expression;
-using Client.Translator.Query;
-using Client.Types;
+using LinqToGraphQL.Reader;
+using LinqToGraphQL.Set;
+using LinqToGraphQL.Set.Configuration;
+using LinqToGraphQL.Translator.Expression;
+using LinqToGraphQL.Translator.Query;
+using LinqToGraphQL.Types;
 
-namespace Client.Provider
+namespace LinqToGraphQL.Provider
 {
 	public class GraphQueryProvider : IQueryProvider
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Client.Translator.Details
+namespace LinqToGraphQL.Translator.Details
 {
 	public class InputDetail
 	{

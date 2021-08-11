@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Client.Extensions;
-using Client.Translator.Details;
+using LinqToGraphQL.Extensions;
+using LinqToGraphQL.Translator.Details;
 
-namespace Client.Translator.Expression
+namespace LinqToGraphQL.Translator.Expression
 {
 	public class GraphExpressionTranslator
 	{

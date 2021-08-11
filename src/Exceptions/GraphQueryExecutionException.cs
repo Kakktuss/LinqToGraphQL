@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Client
+namespace LinqToGraphQL.Exceptions
 {
     public class GraphQueryExecutionException : Exception
     {

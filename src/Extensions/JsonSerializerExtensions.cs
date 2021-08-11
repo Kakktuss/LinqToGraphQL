@@ -1,8 +1,8 @@
-﻿using Client.Json;
+﻿using LinqToGraphQL.Json;
 using Newtonsoft.Json;
 
 #nullable enable
-namespace Client.Extensions
+namespace LinqToGraphQL.Extensions
 {
 	internal static class JsonSerializerExtensions
 	{

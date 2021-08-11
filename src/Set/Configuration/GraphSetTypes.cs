@@ -1,4 +1,4 @@
-﻿namespace Client.Set.Configuration
+﻿namespace LinqToGraphQL.Set.Configuration
 {
 	public enum GraphSetTypes
 	{

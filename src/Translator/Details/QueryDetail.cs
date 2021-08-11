@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Client.Translator.Details
+namespace LinqToGraphQL.Translator.Details
 {
 	public class QueryDetail
 	{

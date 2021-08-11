@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Client.Attributes;
-using Client.Client;
-using Client.Context.Options.Builder.Configure;
-using Client.Context.Options.Configure;
-using Client.Provider;
-using Client.Set;
-using Client.Set.Configuration;
-using Client.Set.Configuration.Builder;
-using HttpClientFactoryLite;
+using LinqToGraphQL.Attributes;
+using LinqToGraphQL.Client;
+using LinqToGraphQL.Context.Options.Builder.Configure;
+using LinqToGraphQL.Context.Options.Configure;
+using LinqToGraphQL.Provider;
+using LinqToGraphQL.Set;
+using LinqToGraphQL.Set.Configuration;
+using LinqToGraphQL.Set.Configuration.Builder;
 
-namespace Client.Context
+namespace LinqToGraphQL.Context
 {
     public class GraphContext
     {

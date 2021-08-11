@@ -5,11 +5,10 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Client.Provider;
-using Client.Set;
-using Client.Set.Include;
+using LinqToGraphQL.Provider;
+using LinqToGraphQL.Set.Include;
 
-namespace Client.Extensions
+namespace LinqToGraphQL.Extensions
 {
 	public static class GraphQueryableExtensions
 	{

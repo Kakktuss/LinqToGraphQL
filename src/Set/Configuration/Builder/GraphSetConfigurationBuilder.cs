@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Client.Set.Configuration.Builder
+namespace LinqToGraphQL.Set.Configuration.Builder
 {
 	public class GraphSetConfigurationBuilder
 	{

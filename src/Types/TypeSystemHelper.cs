@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Client.Types
+namespace LinqToGraphQL.Types
 {
 	public class TypeSystemHelper
 	{
