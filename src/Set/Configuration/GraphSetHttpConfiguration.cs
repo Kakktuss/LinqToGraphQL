@@ -3,25 +3,16 @@ using System.Net.Http.Headers;
 
 namespace LinqToGraphQL.Set.Configuration
 {
+	#nullable enable
 	public class GraphSetHttpConfiguration
 	{
-		public GraphSetHttpConfiguration(string requestUri, HttpMethod method, HttpRequestHeaders headers = null)
+		public GraphSetHttpConfiguration(string requestUri, HttpMethod? method = null, HttpRequestHeaders? headers = null)
 		{
 			RequestUri = requestUri;
 
-			if (headers is null)
-			{
-				headers = new HttpRequestMessage().Headers;
-			}
-			
-			Headers = headers;
+			Headers = headers ?? new HttpRequestMessage().Headers;
 
-			if (method is null)
-			{
-				method = HttpMethod.Get;
-			}
-			
-			Method = method;
+			Method = method ?? HttpMethod.Get;
 		}
 		
 		internal string RequestUri { get; set; }
@@ -30,4 +21,5 @@ namespace LinqToGraphQL.Set.Configuration
 		
 		public HttpMethod Method { get; set; }
 	}
+	#nullable disable
 }
