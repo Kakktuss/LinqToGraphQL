@@ -17,7 +17,7 @@ namespace LinqToGraphQL.Reader
 			_httpResponseMessage = httpResponseMessage;
 		}
 		
-		public async IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = new CancellationToken())
+		public async IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
 		{
 			var httpResponseMessage = await _httpResponseMessage;
 			

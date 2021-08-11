@@ -47,9 +47,9 @@ namespace LinqToGraphQL.Set
 			return ((IEnumerable) _provider.Execute(_expression)).GetEnumerator();
 		}
 		
-		public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = new CancellationToken())
+		public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
 		{
-			return ((IAsyncEnumerable<T>) _provider.ExecuteAsync(_expression)).GetAsyncEnumerator();
+			return ((IAsyncEnumerable<T>) _provider.ExecuteAsync(_expression, cancellationToken)).GetAsyncEnumerator(cancellationToken);
 		}
 
 		public Type ElementType

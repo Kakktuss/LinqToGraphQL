@@ -25,7 +25,7 @@ namespace LinqToGraphQL.Set.Select
 
 		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-		public IAsyncEnumerator<TEntity> GetAsyncEnumerator(CancellationToken cancellationToken = new CancellationToken()) => _asyncEnumerable.GetAsyncEnumerator();
+		public IAsyncEnumerator<TEntity> GetAsyncEnumerator(CancellationToken cancellationToken = default) => _asyncEnumerable.GetAsyncEnumerator(default);
 
 		public Type ElementType => _queryable.ElementType;
 		public Expression Expression => _queryable.Expression;

@@ -83,9 +83,9 @@ namespace LinqToGraphQL.Provider
 			return (TResult) Execute(expression);
 		}
 
-		public object? ExecuteAsync(Expression expression)
+		public object? ExecuteAsync(Expression expression, CancellationToken cancellationToken)
 		{
-			var result =  RequestAsync(expression);
+			var result =  RequestAsync(expression, cancellationToken);
 
 			System.Type elementType = TypeSystemHelper.GetElementType(expression.Type);
 
