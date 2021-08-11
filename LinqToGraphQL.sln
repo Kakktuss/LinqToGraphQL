@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqToGraphql", "src\LinqToGraphql.csproj", "{CC2AE018-65DC-4A67-8F0F-51837C161F20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqToGraphqlExample", "example\LinqToGraphqlExample.csproj", "{6AE625C1-04EB-40C9-8400-3757595476B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,17 @@ Global
 		{CC2AE018-65DC-4A67-8F0F-51837C161F20}.Release|x64.Build.0 = Release|Any CPU
 		{CC2AE018-65DC-4A67-8F0F-51837C161F20}.Release|x86.ActiveCfg = Release|Any CPU
 		{CC2AE018-65DC-4A67-8F0F-51837C161F20}.Release|x86.Build.0 = Release|Any CPU
+		{6AE625C1-04EB-40C9-8400-3757595476B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AE625C1-04EB-40C9-8400-3757595476B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AE625C1-04EB-40C9-8400-3757595476B4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6AE625C1-04EB-40C9-8400-3757595476B4}.Debug|x64.Build.0 = Debug|Any CPU
+		{6AE625C1-04EB-40C9-8400-3757595476B4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6AE625C1-04EB-40C9-8400-3757595476B4}.Debug|x86.Build.0 = Debug|Any CPU
+		{6AE625C1-04EB-40C9-8400-3757595476B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AE625C1-04EB-40C9-8400-3757595476B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AE625C1-04EB-40C9-8400-3757595476B4}.Release|x64.ActiveCfg = Release|Any CPU
+		{6AE625C1-04EB-40C9-8400-3757595476B4}.Release|x64.Build.0 = Release|Any CPU
+		{6AE625C1-04EB-40C9-8400-3757595476B4}.Release|x86.ActiveCfg = Release|Any CPU
+		{6AE625C1-04EB-40C9-8400-3757595476B4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
