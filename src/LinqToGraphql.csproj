@@ -1,27 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <OutputType>Library</OutputType>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <PackageOutputPath>./../output</PackageOutputPath>
-    <PackageProjectUrl>https://github.com/Kakktuss/LinqToGraphQL/</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Kakktuss/LinqToGraphQL/</RepositoryUrl>
-    
-    <RepositoryType>git</RepositoryType>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <Description>Strongly typed GraphQL queries and mutations requests for IQueryable and Linq lovers.</Description>
-    <Version>1.0.1</Version>
-    <PackageId>LinqToGraphQL</PackageId>
-    <PackageTags>GraphQL LINQ json api</PackageTags>
-    <RootNamespace>LinqToGraphQL</RootNamespace>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="HttpClientFactoryLite" Version="0.4.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <OutputType>Library</OutputType>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <PackageOutputPath>./../output</PackageOutputPath>
+        <PackageProjectUrl>https://github.com/Kakktuss/LinqToGraphQL/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Kakktuss/LinqToGraphQL/</RepositoryUrl>
+
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+        <Description>Strongly typed GraphQL queries and mutations requests for IQueryable and Linq lovers.</Description>
+        <Version>1.0.1</Version>
+        <PackageId>LinqToGraphQL</PackageId>
+        <PackageTags>GraphQL LINQ json api</PackageTags>
+        <RootNamespace>LinqToGraphQL</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="HttpClientFactoryLite" Version="0.4.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2"/>
+        <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+    </ItemGroup>
 </Project>

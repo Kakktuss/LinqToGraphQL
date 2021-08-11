@@ -18,29 +18,28 @@ namespace LinqToGraphQL.Reader
 
 		public IEnumerator<T> GetEnumerator()
 		{
-			using (var jsonDocument = JsonDocument.Parse(_httpResponseMessage.Content.ReadAsStream()))
+			using var jsonDocument = JsonDocument.Parse(_httpResponseMessage.Content.ReadAsStream());
+			
+			if (jsonDocument.RootElement.TryGetProperty("errors", out var errorElement))
 			{
-				if (jsonDocument.RootElement.TryGetProperty("errors", out var errorElement))
-				{
-					throw new GraphQueryExecutionException(System.Text.Json.JsonSerializer.Deserialize<List<GraphQueryError>>(errorElement.GetRawText()));
-				}
+				throw new GraphQueryExecutionException(System.Text.Json.JsonSerializer.Deserialize<List<GraphQueryError>>(errorElement.GetRawText()));
+			}
 
-				if (jsonDocument.RootElement.TryGetProperty("data", out var enumerableElement))
+			if (jsonDocument.RootElement.TryGetProperty("data", out var enumerableElement))
+			{
+				if (enumerableElement.TryGetProperty("result", out var enumerableResultElement))
 				{
-					if (enumerableElement.TryGetProperty("result", out var enumerableResultElement))
-					{
-						var text = enumerableResultElement.GetRawText();
+					var text = enumerableResultElement.GetRawText();
 					
-						if (JsonSerializerExtensions.TryDeserialize(text, out List<T> deserializedEnumerableElements))
+					if (JsonSerializerExtensions.TryDeserialize(text, out List<T> deserializedEnumerableElements))
+					{
+						foreach (var deserializedItem in deserializedEnumerableElements)
 						{
-							foreach (var deserializedItem in deserializedEnumerableElements)
-							{
-								yield return deserializedItem;
-							}
-						} else if (JsonSerializerExtensions.TryDeserialize(text, out T deserializedItemElement))
-						{
-							yield return deserializedItemElement;
+							yield return deserializedItem;
 						}
+					} else if (JsonSerializerExtensions.TryDeserialize(text, out T deserializedItemElement))
+					{
+						yield return deserializedItemElement;
 					}
 				}
 			}
