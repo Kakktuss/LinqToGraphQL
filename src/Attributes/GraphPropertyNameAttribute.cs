@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace Client.Attributes
 {
 	[AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Property, AllowMultiple = false)]
-	public class GraphPropertyNameAttribute : Attribute
+	public sealed class GraphPropertyNameAttribute : JsonAttribute
 	{
 
 		public GraphPropertyNameAttribute(string name)

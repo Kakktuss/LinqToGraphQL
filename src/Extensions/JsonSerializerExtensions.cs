@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Client.Json;
+using Newtonsoft.Json;
 
 #nullable enable
 namespace Client.Extensions
@@ -9,11 +10,14 @@ namespace Client.Extensions
 		{
 			try
 			{
-				result = System.Text.Json.JsonSerializer.Deserialize<T>(json);
+				result = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
+				{
+					ContractResolver = new GraphPropertyNameContractResolver()
+				});
 
 				return true;
 			}
-			catch (JsonException exception)
+			catch (JsonException e)
 			{
 				result = default(T);
 				
