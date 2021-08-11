@@ -43,7 +43,9 @@
             <a href="#attributes">Attributes</a>
             <ul>
                 <li><a href="#graph-property-name">GraphPropertyName</a></li>
-                <li><a href="#graph-property-name">GraphPropertyNameBehavior</a></li>
+                <li><a href="#graph-property-name-behavior">GraphPropertyNameBehavior</a></li>
+                <li><a href="#graph-non-nullable-property">GraphNonNullableProperty</a></li>
+                <li><a href="#graph-union-type-property">GraphUnionTypeProperty</a></li>
             </ul>
         </li>
       </ul>
@@ -301,14 +303,24 @@ Will be translated to:
 `query { COUNTRIES {  } }` instead of `query { Countries { } }`
 
 ### GraphNonNullableProperty
-This attribute can be used only on method properties as it acts as a Non-nullable type indicator.
+This attribute can be used only on method parameters as it acts as a Non-nullable type indicator.
 
 ````
 public void Countries([GraphNonNullableProperty] int countryId) {
 }
 ````
 
-Will be translated to `query (countryUuid:Int!) { Countries {  } }` instead of `query (countryUuid: Int) { Countries { } }`
+### GraphUnionTypeProperty
+This attribute can be used only on property as it acts as a Union-type indicator.
+As you may know, in the GraphQL spec there's a part where you can define a union type which represents multiple types.
+This attribute must be used to define what types an object can be.
+
+/!\ Please keep in mind that with this attribute, the Property must be an Object
+
+````cs
+[GraphUnionTypeProperty(typeof(ObjA), typeof(ObjB), typeof(ObjC) /*, etc....*/)
+public object UnionProperty { get; set; }
+````
 
 <!-- Example -->
 ## Example
