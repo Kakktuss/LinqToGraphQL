@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using Client.Attributes;
-using Client.Translator.Behavior;
+using LinqToGraphQL.Attributes;
 
 namespace TestClient.Post
 {

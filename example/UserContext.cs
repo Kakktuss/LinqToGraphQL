@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using Client.Attributes;
-using Client.Context;
-using Client.Context.Options.Builder.Configure;
-using Client.Set;
-using Client.Set.Configuration;
-using Client.Translator.Behavior;
+using LinqToGraphQL.Attributes;
+using LinqToGraphQL.Context;
+using LinqToGraphQL.Context.Options.Builder.Configure;
+using LinqToGraphQL.Set;
+using LinqToGraphQL.Set.Configuration;
+using LinqToGraphQL.Translator.Behavior;
+using TestClient.User;
 
 namespace TestClient
 {
@@ -14,11 +15,11 @@ namespace TestClient
 	{
 		[GraphPropertyName("user")]
 		[GraphPropertyNameBehavior(TranslatorBehavior.UpperCase)]
-		public GraphSet<User.User> User([GraphNonNullableProperty] Guid username)
+		public GraphSet<User.User> User([GraphNonNullableProperty] UserInput input)
 		{
 			return Set<User.User>(new object[]
 			{
-				username
+				input
 			}, builder =>
 			{
 				builder.ConfigureQuery(queryBuilder =>

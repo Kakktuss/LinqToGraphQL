@@ -1,4 +1,4 @@
-﻿using Client.Attributes;
+﻿using LinqToGraphQL.Attributes;
 
 namespace TestClient.Comment
 {

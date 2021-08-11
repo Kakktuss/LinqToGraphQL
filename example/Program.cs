@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Client.Extensions;
+using LinqToGraphQL.Extensions;
+using TestClient.User;
 
 namespace TestClient
 {
@@ -11,7 +12,11 @@ namespace TestClient
 		{
 			var userContext = new UserContext();
 
-			IQueryable<User.User> userQuery = userContext.User(Guid.NewGuid())
+			IQueryable<User.User> userQuery = userContext.User( new UserInput
+				{
+					Name = "test",
+					Description = "est"
+				})
 				.Select(e => new User.User
 				{
 					Name = e.Name,
