@@ -5,7 +5,6 @@
     <OutputType>Library</OutputType>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageOutputPath>./../output</PackageOutputPath>
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/Kakktuss/LinqToGraphQL/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Kakktuss/LinqToGraphQL/</RepositoryUrl>
     
