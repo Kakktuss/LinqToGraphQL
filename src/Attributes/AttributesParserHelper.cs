@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using LinqToGraphQL.Extensions;
 using LinqToGraphQL.Translator.Behavior;
@@ -65,7 +66,14 @@ namespace LinqToGraphQL.Attributes
         
         internal static void CheckMethodParameterTypeAttributes(ref string type, ParameterInfo parameterInfo)
         {
+            var graphPropertyTypeAttribute = parameterInfo.CustomAttributes.FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyTypeAttribute));
+            
             var graphNonNullablePropertyAttribute = parameterInfo.CustomAttributes.FirstOrDefault(e => e.AttributeType == typeof(GraphNonNullablePropertyAttribute));
+
+            if (graphPropertyTypeAttribute is not null)
+            {
+                type = ((Type) graphPropertyTypeAttribute.ConstructorArguments.FirstOrDefault().Value)?.Name;
+            }
             
             if (graphNonNullablePropertyAttribute is not null)
             {

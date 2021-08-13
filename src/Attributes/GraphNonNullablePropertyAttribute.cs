@@ -2,7 +2,7 @@
 
 namespace LinqToGraphQL.Attributes
 {
-	[AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Property, AllowMultiple = false)]
+	[AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
 	public sealed class GraphNonNullablePropertyAttribute : Attribute
 	{
 		

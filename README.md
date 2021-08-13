@@ -310,6 +310,20 @@ public void Countries([GraphNonNullableProperty] int countryId) {
 }
 ````
 
+### GraphPropertyType
+This attribute can be used only on method parameters as it acts as a type-changing indicator.
+This attribute changes the name displayed on the query inputs declaration. 
+<br/>
+It can be useful in some cases where a type can be a custom scalar input defined by the API but his value need to be a c# built-in type such as "string".
+Example: <https://shopify.dev/api/admin/graphql/reference/scalar#id-2021-04>; Here ID is a custom scalar but his value is a string in the query.
+
+````cs
+public void Posts([GraphPropertyType(typeof(string))] Guid id) {}
+````
+
+The current input declaration will be translated to:
+`query ($postsId:String) { posts(id:$postsId) {  } }`
+
 ### GraphUnionTypeProperty
 This attribute can be used only on property as it acts as a Union-type indicator.
 As you may know, in the GraphQL spec there's a part where you can define a union type which represents multiple types.
