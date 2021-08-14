@@ -4,10 +4,10 @@ using LinqToGraphQL.Translator.Behavior;
 namespace LinqToGraphQL.Attributes
 {
 	[AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Property, AllowMultiple = false)]
-	public sealed class GraphPropertyNameBehaviorAttribute : Attribute
+	public sealed class GraphNameBehaviorAttribute : Attribute
 	{
 
-		public GraphPropertyNameBehaviorAttribute(TranslatorBehavior translatorBehavior)
+		public GraphNameBehaviorAttribute(TranslatorBehavior translatorBehavior)
 		{
 			TranslatorBehavior = translatorBehavior;
 		}

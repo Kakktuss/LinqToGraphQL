@@ -3,10 +3,10 @@
 namespace LinqToGraphQL.Attributes
 {
 	[AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
-	public class GraphPropertyTypeAttribute : Attribute
+	public class GraphParameterTypeAttribute : Attribute
 	{
 
-		public GraphPropertyTypeAttribute(Type type)
+		public GraphParameterTypeAttribute(Type type)
 		{
 			Type = type;
 		}

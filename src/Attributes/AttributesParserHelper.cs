@@ -10,9 +10,9 @@ namespace LinqToGraphQL.Attributes
 	{
 		internal static void CheckMethodNameAttributes(ref string nodeName, MethodInfo methodInfo)
         {
-            var graphNameAttribute = methodInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyNameAttribute));
+            var graphNameAttribute = methodInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphNameAttribute));
 
-            var graphNameTranslatorBehaviorAttribute = methodInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyNameBehaviorAttribute));
+            var graphNameTranslatorBehaviorAttribute = methodInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphNameBehaviorAttribute));
 							
             if (graphNameAttribute != null)
             {
@@ -38,9 +38,9 @@ namespace LinqToGraphQL.Attributes
         
         internal static void CheckMethodParameterNameAttributes(ref string nodeName, ParameterInfo parameterInfo)
         {
-            var graphNameAttribute = parameterInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyNameAttribute));
+            var graphNameAttribute = parameterInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphNameAttribute));
 
-            var graphNameTranslatorBehaviorAttribute = parameterInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyNameBehaviorAttribute));
+            var graphNameTranslatorBehaviorAttribute = parameterInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphNameBehaviorAttribute));
             
             if (graphNameAttribute is not null)
             {
@@ -66,9 +66,9 @@ namespace LinqToGraphQL.Attributes
         
         internal static void CheckMethodParameterTypeAttributes(ref string type, ParameterInfo parameterInfo)
         {
-            var graphPropertyTypeAttribute = parameterInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyTypeAttribute));
+            var graphPropertyTypeAttribute = parameterInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphParameterTypeAttribute));
             
-            var graphNonNullablePropertyAttribute = parameterInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphNonNullablePropertyAttribute));
+            var graphNonNullablePropertyAttribute = parameterInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphNonNullableParameterAttribute));
 
             if (graphPropertyTypeAttribute is not null)
             {
@@ -83,9 +83,9 @@ namespace LinqToGraphQL.Attributes
 
         internal static void CheckPropertyNameAttributes(ref string nodeName, PropertyInfo propertyInfo)
         {
-            var graphNameAttribute = propertyInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyNameAttribute));
+            var graphNameAttribute = propertyInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphNameAttribute));
 
-            var graphNameTranslatorBehaviorAttribute = propertyInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyNameBehaviorAttribute));
+            var graphNameTranslatorBehaviorAttribute = propertyInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphNameBehaviorAttribute));
 
             if (graphNameAttribute != null)
             {
