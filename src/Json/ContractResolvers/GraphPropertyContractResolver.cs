@@ -15,9 +15,9 @@ namespace LinqToGraphQL.Json
 		{
 			var property = base.CreateProperty(member, memberSerialization);
 
-			var graphNameAttribute = member.CustomAttributes.FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyNameAttribute));
+			var graphNameAttribute = member.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphPropertyNameAttribute));
 
-			var graphUnionTypeAttribute = member.CustomAttributes.FirstOrDefault(e => e.AttributeType == typeof(GraphUnionTypePropertyAttribute));
+			var graphUnionTypeAttribute = member.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphUnionTypePropertyAttribute));
 
 			if (graphNameAttribute is not null)
 			{

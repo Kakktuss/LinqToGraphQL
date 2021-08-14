@@ -18,6 +18,15 @@ namespace LinqToGraphQL.Set.Configuration.Builder
 
 			return this;
 		}
+		
+		public GraphSetConfigurationBuilder WithUrl(Uri uri)
+		{
+			Url = uri.AbsoluteUri;
+
+			HttpConfigurationBuilder.RequestUri = uri.AbsoluteUri;
+
+			return this;
+		}
 
 		public GraphSetConfigurationBuilder ConfigureHttp(Action<GraphSetHttpConfigurationBuilder> httpConfigurationBuilder)
 		{
