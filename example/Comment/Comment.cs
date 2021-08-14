@@ -4,10 +4,10 @@ namespace TestClient.Comment
 {
 	public class Comment
 	{
-		[GraphPropertyName("title")]
+		[GraphName("title")]
 		public string Title { get; set; }
 		
-		[GraphPropertyName("content")]
+		[GraphName("content")]
 		public string Content { get; set; }
 	}
 }

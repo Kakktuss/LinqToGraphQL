@@ -13,9 +13,9 @@ namespace TestClient
 {
 	public class UserContext : GraphContext
 	{
-		[GraphPropertyName("user")]
-		[GraphPropertyNameBehavior(TranslatorBehavior.UpperCase)]
-		public GraphSet<User.User> User([GraphNonNullableProperty] UserInput input)
+		[GraphName("user")]
+		[GraphNameBehavior(TranslatorBehavior.UpperCase)]
+		public GraphSet<User.User> User([GraphNonNullableParameter] UserInput input)
 		{
 			return Set<User.User>(new object[]
 			{

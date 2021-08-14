@@ -5,17 +5,17 @@ namespace TestClient.User
 {
 	public class User
 	{
-		[GraphPropertyName("name")]
+		[GraphName("name")]
 		[GraphUnionTypeProperty(typeof(int), typeof(string))]
 		public string Name { get; set; }
 		
-		[GraphPropertyName("username")]
+		[GraphName("username")]
 		public string Username { get; set; }
 
-		[GraphPropertyName("posts")]
-		public List<Post.Post> Posts([GraphNonNullableProperty] [GraphPropertyName("postsId")] [GraphPropertyTypeAttribute(typeof(string))] int id) => new List<Post.Post>();
+		[GraphName("posts")]
+		public List<Post.Post> Posts([GraphNonNullableParameter] [GraphName("postsId")] [GraphParameterType(typeof(string))] int id) => new List<Post.Post>();
 		
-		[GraphPropertyName("comments")]
+		[GraphName("comments")]
 		public List<Comment.Comment> Comments { get; set; }
 	}
 }

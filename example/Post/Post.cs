@@ -5,13 +5,13 @@ namespace TestClient.Post
 {
 	public class Post
 	{
-		[GraphPropertyName("title")]
+		[GraphName("title")]
 		public string Title { get; set; }
 		
-		[GraphPropertyName("content")]
+		[GraphName("content")]
 		public string Content { get; set; }
 
-		[GraphPropertyName("comments")]
-		public List<Comment.Comment> Comments([GraphPropertyName("commentsId")] int id) => new List<Comment.Comment>();
+		[GraphName("comments")]
+		public List<Comment.Comment> Comments([GraphName("commentsId")] int id) => new List<Comment.Comment>();
 	}
 }
