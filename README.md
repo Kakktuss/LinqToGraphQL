@@ -42,10 +42,10 @@
         <li>
             <a href="#attributes">Attributes</a>
             <ul>
-                <li><a href="#graph-property-name">GraphPropertyName</a></li>
-                <li><a href="#graph-property-name-behavior">GraphPropertyNameBehavior</a></li>
-                <li><a href="#graph-non-nullable-property">GraphNonNullableProperty</a></li>
-                <li><a href="#graph-union-type-property">GraphUnionTypeProperty</a></li>
+                <li><a href="#global-attributes">Global attributes</a></li>
+                <li><a href="#method-attributes">Method attributes</a></li>
+                <li><a href="#method-parameter-attributes">Method parameter attributes</a></li>
+                <li><a href="#property-attributes">Property attributes</a></li>
             </ul>
         </li>
       </ul>
@@ -55,6 +55,7 @@
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#thanks">Thanks</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -265,10 +266,14 @@ protected override void Configure(GraphContextConfigureOptionsBuilder graphConte
 In order to have a full control of how the query is translated by the engine, there's actually two Graph attributes which you can use to modify the behavior of the engine.
 These attributes have the ability to be used on Entity definitions, Context method definitions and input definitions.
 
-### GraphPropertyName
-This attribute can be used to configure the name of the member translated into the query.
-It takes a name argument which is a string.
+### Global attributes
 
+#### GraphPropertyName
+This attribute can be used to configure the name of the member translated into the query. It can be used either on methods; method parameters or properties
+<br/>
+It takes a name constructor argument which is a string.
+
+Example:
 ````cs
 [GraphPropertyName("countries")]
 public void Countries() {
@@ -278,16 +283,17 @@ public void Countries() {
 Will be translated to:
 `query { countries {  } }` instead of `query { Countries {  } }`
 
-Another example this time with inputs:
+Another example this time with method parameters:
 `````cs
 public void Countries([GraphPropertyName("inputA")] string a) {}
 `````
 
 Will be translated to:
-`query { Countries(inputA: $a) {  } }` instead of `query { Countries(a: $a) {  } }`
+`query($a:String) { Countries(inputA: $a) {  } }` instead of `query($a:String) { Countries(a: $a) {  } }`
 
-### GraphPropertyNameBehavior
-This attribute now can be used to configure the way the name will be displayed into the query. 
+#### GraphPropertyNameBehavior
+This attribute can be used to configure the way the name will be displayed into the query or the mutation. It can be used either on methods; method parameters or properties
+<br/>
 It takes a propertyBehavior which is an Enum of TranslatorBehavior:
 - CamelCase: This behavior will display the name in camelCase
 - UpperCase: This behavior will display the name in UPPERCASE
@@ -302,7 +308,22 @@ public void Countries() {
 Will be translated to:
 `query { COUNTRIES {  } }` instead of `query { Countries { } }`
 
-### GraphNonNullableProperty
+### Method attributes
+
+#### GraphBackingField
+This attribute can be used to specify a backingfield container which will contain the resulting JSON data of the request executed.
+It takes a propertyName which is a string and should be a nameof() of a property inside the class.
+
+````cs
+private List<CountryLocale> _countryLocales;
+
+[GraphBackingField(nameof(_countryLocales))]
+public List<CountryLocales> CountryLocales() => _countryLocales;
+````
+
+### Method parameter attributes
+
+#### GraphNonNullableProperty
 This attribute can be used only on method parameters as it acts as a Non-nullable type indicator.
 
 ````
@@ -310,7 +331,7 @@ public void Countries([GraphNonNullableProperty] int countryId) {
 }
 ````
 
-### GraphPropertyType
+#### GraphParameterType
 This attribute can be used only on method parameters as it acts as a type-changing indicator.
 This attribute changes the name displayed on the query inputs declaration. 
 <br/>
@@ -324,7 +345,9 @@ public void Posts([GraphPropertyType(typeof(string))] Guid id) {}
 The current input declaration will be translated to:
 `query ($postsId:String) { posts(id:$postsId) {  } }`
 
-### GraphUnionTypeProperty
+### Property attributes
+
+#### GraphUnionTypeProperty
 This attribute can be used only on property as it acts as a Union-type indicator.
 As you may know, in the GraphQL spec there's a part where you can define a union type which represents multiple types.
 This attribute must be used to define what types an object can be.
@@ -350,8 +373,11 @@ public class User
     [GraphPropertyName("username")]
     public string Username { get; set; }
 
+    private List<Post.Post> _posts;
+
     [GraphPropertyName("posts")]
-    public List<Post.Post> Posts([GraphNonNullableProperty] [GraphPropertyName("postsId")] int id) => new List<Post.Post>();
+    [GraphBackingField(nameof(_posts))]
+    public List<Post.Post> Posts([GraphNonNullableProperty] [GraphPropertyName("postsId")] int id) => _posts;
     
     [GraphPropertyName("comments")]
     public List<Comment.Comment> Comments { get; set; }
@@ -365,8 +391,11 @@ public class Post
     [GraphPropertyName("content")]
     public string Content { get; set; }
 
+    private List<Comment.Comment> _comments;
+
     [GraphPropertyName("comments")]
-    public List<Comment.Comment> Comments([GraphPropertyName("commentsId")] int id) => new List<Comment.Comment>();
+    [GraphBackingField(nameof(_comments))]
+    public List<Comment.Comment> Comments([GraphPropertyName("commentsId")] int id) => _comments;
 }
 
 public class Comment
@@ -446,7 +475,7 @@ This query once executed using the aggregator ToItem will be translated to:
 <!-- ROADMAP -->
 ## Roadmap
 
-Actually there is no roadmap really defined, i will give some updates occasionally to add other broker support and to add some unit tests.
+Actually there is no roadmap really defined, i will give some updates occasionally to add other linq operators support and to add some unit tests.
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -463,6 +492,13 @@ Contributions are what make the open source community such an amazing place to b
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
+
+<!-- THANKS -->
+## Thanks
+
+A big thanks to [@Giorgi](https://github.com/Giorgi)'s lib [GraphQLinq](https://github.com/Giorgi/GraphQLinq) which helped me to start this project.
+<br/>
+And another special thanks to [@Mattwar](https://github.com/mattwar) with his github repository [IQToolkit](https://github.com/mattwar/iqtoolkit/tree/master/docs/blog) which helped me to understand how Linq & IQueryable work in depth.  
 
 <!-- CONTACT -->
 ## Contact
