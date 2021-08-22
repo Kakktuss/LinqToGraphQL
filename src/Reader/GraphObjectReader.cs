@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Text.Json;
 using LinqToGraphQL.Exceptions;
@@ -41,6 +43,7 @@ namespace LinqToGraphQL.Reader
 					{
 						yield return deserializedItemElement;
 					}
+
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using LinqToGraphQL.Attributes;
@@ -12,6 +13,8 @@ namespace LinqToGraphQL.Json
 {
 	public class GraphPropertyNameContractResolver : DefaultContractResolver
 	{
+		public static readonly GraphPropertyNameContractResolver Instance = new GraphPropertyNameContractResolver();
+		
 		private readonly Dictionary<string, MemberInfo> _methodBackingFields = new();
 
 		protected override List<MemberInfo> GetSerializableMembers(Type objectType)
@@ -39,7 +42,7 @@ namespace LinqToGraphQL.Json
 					}
 				}
 			}
-			
+
 			return serializableMembers;
 		}
 

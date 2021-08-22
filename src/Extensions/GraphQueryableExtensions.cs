@@ -39,7 +39,7 @@ namespace LinqToGraphQL.Extensions
 				return genericArguments == 2
 				       && methodInfo.GetParameters().Any(parameterInfo => parameterInfo.Name == "navigationPropertyPath" && parameterInfo.ParameterType != typeof(string));
 			});
-		
+
 		// ThenInclude enumerable
 		public static IIncludableQueryable<TEntity, TProperty> ThenInclude<TEntity, TPreviousProperty, TProperty>(this IIncludableQueryable<TEntity, IEnumerable<TPreviousProperty>> source,
 			Expression<Func<TPreviousProperty, TProperty>> navigationPropertyPath)
@@ -87,7 +87,7 @@ namespace LinqToGraphQL.Extensions
 		#endregion
 		
 		#region Selectable methods
-
+		
 		public static IIncludableQueryable<TEntity, TProperty> Select<TEntity, TPreviousProperty, TProperty>(this IIncludableQueryable<TEntity, IEnumerable<TPreviousProperty>> source,
 			Expression<Func<TPreviousProperty, TProperty>> navigationPropertyPath)
 		{
@@ -108,6 +108,28 @@ namespace LinqToGraphQL.Extensions
 					var typeInfo = methodInfo.GetParameters()[0].ParameterType.GenericTypeArguments[1];
 					return typeInfo.IsGenericType && typeInfo.GetGenericTypeDefinition() == typeof(IEnumerable<>);
 				});
+		
+		public static IIncludableQueryable<TEntity, TProperty> Select<TEntity, TPreviousProperty, TProperty>(this IIncludableQueryable<TEntity, TPreviousProperty> source,
+			Expression<Func<TPreviousProperty, TProperty>> navigationPropertyPath)
+		{
+			return new IncludableQueryable<TEntity, TProperty>(source.Provider is GraphQueryProvider
+				? source.Provider.CreateQuery<TEntity>(
+					Expression.Call(
+						instance: null,
+						method: SelectAfterReferenceMethodInfo().MakeGenericMethod(
+							typeof(TEntity), typeof(TPreviousProperty), typeof(TProperty)),
+						arguments: new[] { source.Expression, Expression.Quote(navigationPropertyPath) }))
+				: source);
+		}
+
+		internal static MethodInfo SelectAfterReferenceMethodInfo() =>  typeof(GraphQueryableExtensions)
+			.GetTypeInfo().GetDeclaredMethods(nameof(Select))
+			.Single(methodInfo =>
+			{
+				var typeInfo = methodInfo.GetParameters()[0].ParameterType.GenericTypeArguments[1];
+				return methodInfo.GetGenericArguments().Count() == 3 
+				       && typeInfo.IsGenericParameter;
+			});
 
 		#endregion
 		

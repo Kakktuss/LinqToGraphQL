@@ -43,7 +43,7 @@ namespace LinqToGraphQL.Translator.Query
 
             var queryInputs = "";
 
-            if (graphSetQueryConfiguration.Arguments.Any())
+            if (graphSetQueryConfiguration.Arguments.Any(e => e.Value.Item2 is not null))
             {
                 queryInputs += "(";
                 
@@ -124,19 +124,34 @@ namespace LinqToGraphQL.Translator.Query
                     currentQuery += string.Format(includeTemplate, includeDetailName, currentInputs, TranslateSubIncludes(includeDetail.Includes));
                 } else if (includeDetail.Attribute is PropertyInfo propertyInfo)
                 {
-                    if (propertyInfo.PropertyType.IsGenericType)
+                    if (!propertyInfo.PropertyType.IsPrimitive && propertyInfo.PropertyType.Name is not "String")
                     {
+                        if (propertyInfo.PropertyType.IsGenericType)
+                        {
+                            var propertyGenericArgument = propertyInfo.PropertyType.GetGenericArguments().FirstOrDefault();
+
+                            if (propertyGenericArgument is not null && (propertyGenericArgument.IsPrimitive || propertyGenericArgument.Name is "String"))
+                            {
+                                var genericIncludeDetailName = includeDetail.Name;
+                                
+                                AttributesParserHelper.CheckPropertyNameAttributes(ref genericIncludeDetailName, propertyInfo);
+                                
+                                currentQuery += $"{genericIncludeDetailName}{(includeDetailIndex != includeDetails.Count - 1 ? ", " : "")}";
+
+                                continue;
+                            }
+                        }
+
                         var includeTemplate = "{0} {{ {1} }}";
                         
-                        var genericIncludeDetailName = includeDetail.Name;
+                        var nonPrimitiveIncludeDetailName = includeDetail.Name;
 
-                        AttributesParserHelper.CheckPropertyNameAttributes(ref genericIncludeDetailName, propertyInfo);
+                        AttributesParserHelper.CheckPropertyNameAttributes(ref nonPrimitiveIncludeDetailName, propertyInfo);
                         
-                        currentQuery += string.Format(includeTemplate, genericIncludeDetailName, TranslateSubIncludes(includeDetail.Includes));
+                        currentQuery += $"{string.Format(includeTemplate, nonPrimitiveIncludeDetailName, TranslateSubIncludes(includeDetail.Includes))}{(includeDetailIndex != includeDetails.Count - 1 ? ", " : "")}";
                         
                         continue;
                     }
-
                     var includeDetailName = includeDetail.Name;
 
                     AttributesParserHelper.CheckPropertyNameAttributes(ref includeDetailName, propertyInfo);

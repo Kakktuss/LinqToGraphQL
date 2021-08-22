@@ -1,4 +1,6 @@
-﻿using LinqToGraphQL.Json;
+﻿using System;
+using System.Diagnostics;
+using LinqToGraphQL.Json;
 using Newtonsoft.Json;
 
 #nullable enable
@@ -12,9 +14,9 @@ namespace LinqToGraphQL.Extensions
 			{
 				result = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
 				{
-					ContractResolver = new GraphPropertyNameContractResolver()
+					ContractResolver = GraphPropertyNameContractResolver.Instance
 				});
-
+				
 				return true;
 			}
 			catch (JsonException e)
