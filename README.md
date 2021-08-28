@@ -333,7 +333,7 @@ public void Countries([GraphNonNullableProperty] int countryId) {
 
 #### GraphParameterType
 This attribute can be used only on method parameters as it acts as a type-changing indicator.
-This attribute changes the name displayed on the query inputs declaration. 
+This attribute changes the type displayed on the query inputs declaration. 
 <br/>
 It can be useful in some cases where a type can be a custom scalar input defined by the API but his value need to be a c# built-in type such as "string".
 Example: <https://shopify.dev/api/admin/graphql/reference/scalar#id-2021-04>; Here ID is a custom scalar but his value is a string in the query.
@@ -344,6 +344,21 @@ public void Posts([GraphPropertyType(typeof(string))] Guid id) {}
 
 The current input declaration will be translated to:
 `query ($postsId:String) { posts(id:$postsId) {  } }`
+
+### GraphParameterTypeName
+This attribute can be used only on method parameters as it acts as a type-changing indicator.
+This attribute is another alternative to change the type displayed on the query inputs declarations because it only requires a string and not a type.
+<br/>
+It can be useful in some cases where a type can be a custom scalar input or when you define an Input type which is not the same as specified in the documentation.
+Example: <https://shopify.dev/api/admin/graphql/reference/metafields/metafielddelete>; Here the required input type is MetafieldDeleteInput but with this attribute i can define a DeleteMetafieldInput class.
+
+````cs
+[GraphName("metafieldDelete")]
+public void DeleteMetafield([GraphPropertyTypeName("MetafieldDeleteInput")] DeleteMetafieldInput input) {}
+````
+
+The current input declaration will be translated to:
+`mutation ($input: MetafieldDeleteInput) { metafieldDelete(input:$input) {  } }`
 
 ### Property attributes
 
@@ -504,3 +519,13 @@ And another special thanks to [@Mattwar](https://github.com/mattwar) with his gi
 ## Contact
 
 Benjamin Mandervelde - [@kakktuss](https://twitter.com/Kakktuss) - benjaminmanderveldepro@gmail.com
+
+
+### Hi there 👋
+
+Hi, I'm Kaktus, a 18 years old back-end developer passionate about programming since i'm 10 and for the last two years i mainly focus on learning back-end architecture & microservices design  !
+I am also passionate about science, new technologies and entrepreneuship.
+
+### What I am focusing on 👀
+<https://img.shields.io/badge/csharp-C%23-blueviolet?style=for-the-badge&logo=csharp>
+I work mainly with the C
