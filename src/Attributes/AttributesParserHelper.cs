@@ -68,11 +68,18 @@ namespace LinqToGraphQL.Attributes
         {
             var graphPropertyTypeAttribute = parameterInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphParameterTypeAttribute));
             
-            var graphNonNullablePropertyAttribute = parameterInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphNonNullableParameterAttribute));
+            var graphPropertyTypeNameAttribute = parameterInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphParameterTypeNameAttribute));
 
+            var graphNonNullablePropertyAttribute = parameterInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphNonNullableParameterAttribute));
+            
             if (graphPropertyTypeAttribute is not null)
             {
                 type = ((Type) graphPropertyTypeAttribute.ConstructorArguments.FirstOrDefault().Value)?.Name;
+            }
+            
+            if (graphPropertyTypeNameAttribute is not null)
+            {
+                type = ((Type) graphPropertyTypeNameAttribute.ConstructorArguments.FirstOrDefault().Value)?.Name;
             }
             
             if (graphNonNullablePropertyAttribute is not null)

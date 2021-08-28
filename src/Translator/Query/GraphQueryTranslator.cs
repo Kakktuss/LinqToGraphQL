@@ -4,8 +4,10 @@ using System.Linq;
 using System.Reflection;
 using LinqToGraphQL.Attributes;
 using LinqToGraphQL.Extensions;
+using LinqToGraphQL.Json;
 using LinqToGraphQL.Set.Configuration;
 using LinqToGraphQL.Translator.Details;
+using Newtonsoft.Json;
 
 namespace LinqToGraphQL.Translator.Query
 {
@@ -21,11 +23,15 @@ namespace LinqToGraphQL.Translator.Query
 
         internal string Translate(GraphSetQueryConfiguration graphSetQueryConfiguration, List<IncludeDetail> includeDetails)
         {
-            return System.Text.Json.JsonSerializer.Serialize(new QueryDetail
+            return JsonConvert.SerializeObject(new QueryDetail
             {
                 Query = TranslateEntireQuery(graphSetQueryConfiguration, includeDetails),
                 Variables = _inputs.ToDictionary(p => p.Key, p => p.Value.VariableValue)
-            });
+            }, 
+                new JsonSerializerSettings
+                {
+                    ContractResolver = new GraphSerializerContractResolver()
+                });
         }
         
         internal string TranslateEntireQuery(GraphSetQueryConfiguration graphSetQueryConfiguration, List<IncludeDetail> includeDetails)
@@ -140,6 +146,15 @@ namespace LinqToGraphQL.Translator.Query
 
                                 continue;
                             }
+                        } else if (propertyInfo.PropertyType.IsEnum)
+                        {
+                            var enumIncludeDetailName = includeDetail.Name;
+                            
+                            AttributesParserHelper.CheckPropertyNameAttributes(ref enumIncludeDetailName, propertyInfo);
+                                
+                            currentQuery += $"{enumIncludeDetailName}{(includeDetailIndex != includeDetails.Count - 1 ? ", " : "")}";
+
+                            continue;
                         }
 
                         var includeTemplate = "{0} {{ {1} }}";

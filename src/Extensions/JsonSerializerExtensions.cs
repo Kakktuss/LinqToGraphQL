@@ -14,7 +14,7 @@ namespace LinqToGraphQL.Extensions
 			{
 				result = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
 				{
-					ContractResolver = GraphPropertyNameContractResolver.Instance
+					ContractResolver = GraphDeserializerContractResolver.Instance
 				});
 				
 				return true;

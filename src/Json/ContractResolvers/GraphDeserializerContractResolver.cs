@@ -11,9 +11,9 @@ using Newtonsoft.Json.Serialization;
 
 namespace LinqToGraphQL.Json
 {
-	public class GraphPropertyNameContractResolver : DefaultContractResolver
+	public class GraphDeserializerContractResolver : DefaultContractResolver
 	{
-		public static readonly GraphPropertyNameContractResolver Instance = new GraphPropertyNameContractResolver();
+		public static readonly GraphDeserializerContractResolver Instance = new GraphDeserializerContractResolver();
 		
 		private readonly Dictionary<string, MemberInfo> _methodBackingFields = new();
 
