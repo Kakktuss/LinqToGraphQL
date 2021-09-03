@@ -7,7 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\src\LinqToGraphql.csproj"/>
+        <ProjectReference Include="..\src\LinqToGraphql.csproj" />
+        <ProjectReference Include="..\src\LinqToGraphql\LinqToGraphql.csproj" />
     </ItemGroup>
 
 </Project>
