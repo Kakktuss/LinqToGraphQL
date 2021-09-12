@@ -20,12 +20,16 @@ namespace LinqToGraphQL.Provider
 	{
 
 		private readonly GraphSetConfiguration _graphSetConfiguration;
+
+		private readonly Type _methodReturnType;
 		
 		private readonly HttpClient _graphHttpClient;
 
-		public GraphQueryProvider(GraphSetConfiguration graphSetConfiguration, HttpClient graphHttpClient)
+		public GraphQueryProvider(GraphSetConfiguration graphSetConfiguration, Type methodReturnType, HttpClient graphHttpClient)
 		{
 			_graphSetConfiguration = graphSetConfiguration;
+
+			_methodReturnType = methodReturnType;
 
 			_graphHttpClient = graphHttpClient;
 		}
@@ -152,7 +156,7 @@ namespace LinqToGraphQL.Provider
 		{
 			var includeDetails = new GraphExpressionTranslator().Translate(expression);
 
-			var queryTranslate = new GraphQueryTranslator().Translate(_graphSetConfiguration.Query, includeDetails);
+			var queryTranslate = new GraphQueryTranslator().Translate(_graphSetConfiguration.Query, _methodReturnType, includeDetails);
 			
 			return queryTranslate;
 		}

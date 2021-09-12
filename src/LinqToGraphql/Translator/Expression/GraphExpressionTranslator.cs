@@ -54,9 +54,30 @@ namespace LinqToGraphQL.Translator.Expression
 				{
 					foreach (var binding in node.Bindings)
 					{
-						if (!_includeTree.Exists(e => e.Name == binding.Member.Name))
+						if (binding is MemberAssignment memberAssignment)
 						{
-							_includeTree.Add(new IncludeDetail(binding.Member.Name, binding.Member));
+							if (!_includeTree.Exists(e => e.Name == memberAssignment.Member.Name))
+							{
+								_includeTree.Add(new IncludeDetail(memberAssignment.Member.Name, memberAssignment.Member, memberAssignment.Member.ReflectedType));
+							}
+							
+							if (memberAssignment.Expression is MemberInitExpression memberInitExpression)
+							{
+								Visit(memberInitExpression, $"{parent}.{memberAssignment.Member.Name}");
+							} else if (memberAssignment.Expression is ListInitExpression listInitExpression)
+							{
+								var listInitializer = listInitExpression.Initializers.FirstOrDefault();
+
+								if (listInitializer is not null)
+								{
+									var firstArgument = listInitializer.Arguments.FirstOrDefault();
+
+									if (firstArgument is not null && firstArgument is MemberInitExpression firstArgumentMemberInitExpression)
+									{
+										Visit(firstArgumentMemberInitExpression, $"{parent}.{memberAssignment.Member.Name}");
+									}
+								}
+							}
 						}
 					}
 				} else
@@ -74,9 +95,33 @@ namespace LinqToGraphQL.Translator.Expression
 					{
 						foreach (var binding in node.Bindings)
 						{
-							if (!parentInclude.Includes.Exists(e => e.Name == binding.Member.Name))
+							if (binding is MemberAssignment memberAssignment)
 							{
-								parentInclude.AddSubInclude(new IncludeDetail(binding.Member.Name, binding.Member));
+								if (!parentInclude.Includes.Exists(e => e.Name == memberAssignment.Member.Name))
+								{
+									parentInclude.AddSubInclude(new IncludeDetail(memberAssignment.Member.Name, memberAssignment.Member, memberAssignment.Member.ReflectedType));
+								}
+								
+								if (memberAssignment.Expression is MemberInitExpression memberInitExpression)
+								{
+									Visit(memberInitExpression, $"{parent}.{memberAssignment.Member.Name}");
+								} else if (memberAssignment.Expression is ListInitExpression listInitExpression)
+								{
+									if (listInitExpression.Initializers.Any())
+									{
+										var listInitializer = listInitExpression.Initializers.FirstOrDefault();
+
+										if (listInitializer is not null && listInitializer.Arguments.Any())
+										{
+											var firstArgument = listInitializer.Arguments.FirstOrDefault();
+
+											if (firstArgument is not null && firstArgument is MemberInitExpression firstArgumentMemberInitExpression)
+											{
+												Visit(firstArgumentMemberInitExpression, $"{parent}.{memberAssignment.Member.Name}");
+											}
+										}
+									}
+								}
 							}
 						}
 					}
@@ -96,7 +141,7 @@ namespace LinqToGraphQL.Translator.Expression
 				{
 					if (!_includeTree.Exists(e => e.Name == node.Member.Name))
 					{
-						parentInclude = new IncludeDetail(node.Member.Name, node.Member);
+						parentInclude = new IncludeDetail(node.Member.Name, node.Member, node.Member.ReflectedType);
 					
 						_includeTree.Add(parentInclude);
 					}
@@ -116,7 +161,7 @@ namespace LinqToGraphQL.Translator.Expression
 					{
 						if (!parentInclude.Includes.Exists(e => e.Name == node.Member.Name))
 						{
-							parentInclude.AddSubInclude(new IncludeDetail(node.Member.Name, node.Member));
+							parentInclude.AddSubInclude(new IncludeDetail(node.Member.Name, node.Member, node.Member.ReflectedType));
 						}
 					}
 				}
@@ -157,6 +202,15 @@ namespace LinqToGraphQL.Translator.Expression
 				return Visit(StripQuotes(node.Arguments[1]), parent);
 			} else if (node.Method.Name == "Select")
 			{
+				var parentNames = parent.Split(".");
+
+				IncludeDetail parentInclude = _includeTree.FirstOrDefault(e => e.Name == parentNames.First());
+
+				foreach (var parentName in parentNames.Skip(1))
+				{
+					parentInclude = parentInclude?.Includes.FirstOrDefault(e => e.Name == parentName);
+				}
+				
 				if (node.Arguments[0] is MethodCallExpression methodCallExpression)
 				{
 					var resultingNode = Visit(methodCallExpression, parent);
@@ -187,7 +241,7 @@ namespace LinqToGraphQL.Translator.Expression
 				{
 					if (!_includeTree.Exists(e => e.Name == node.Method.Name))
 					{
-						parentInclude = new IncludeDetail(node.Method.Name, node.Method);
+						parentInclude = new IncludeDetail(node.Method.Name, node.Method, node.Method.ReturnType);
 
 						foreach ((var methodParameter, var methodParameterValue) in zippedMethodParameters)
 						{
@@ -215,7 +269,7 @@ namespace LinqToGraphQL.Translator.Expression
 					{
 						if (!parentInclude.Includes.Exists(e => e.Name == node.Method.Name))
 						{
-							var subInclude = new IncludeDetail(node.Method.Name, node.Method);
+							var subInclude = new IncludeDetail(node.Method.Name, node.Method, node.Method.ReturnType);
 							
 							foreach ((var methodParameter, var methodParameterValue) in zippedMethodParameters)
 							{

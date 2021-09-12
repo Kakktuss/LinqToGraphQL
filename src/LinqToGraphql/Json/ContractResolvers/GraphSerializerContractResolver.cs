@@ -8,7 +8,9 @@ namespace LinqToGraphQL.Json
 {
 	public class GraphSerializerContractResolver : DefaultContractResolver
 	{
-
+		
+		public static readonly GraphSerializerContractResolver Instance = new GraphSerializerContractResolver();
+		
 		protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
 		{
 			var property = base.CreateProperty(member, memberSerialization);

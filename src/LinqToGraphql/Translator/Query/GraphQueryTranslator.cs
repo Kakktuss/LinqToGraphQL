@@ -21,20 +21,20 @@ namespace LinqToGraphQL.Translator.Query
             _inputs = new();
         }
 
-        internal string Translate(GraphSetQueryConfiguration graphSetQueryConfiguration, List<IncludeDetail> includeDetails)
+        internal string Translate(GraphSetQueryConfiguration graphSetQueryConfiguration, Type methodReturnType, List<IncludeDetail> includeDetails)
         {
             return JsonConvert.SerializeObject(new QueryDetail
             {
-                Query = TranslateEntireQuery(graphSetQueryConfiguration, includeDetails),
+                Query = TranslateEntireQuery(graphSetQueryConfiguration, methodReturnType, includeDetails),
                 Variables = _inputs.ToDictionary(p => p.Key, p => p.Value.VariableValue)
             }, 
                 new JsonSerializerSettings
                 {
-                    ContractResolver = new GraphSerializerContractResolver()
+                    ContractResolver = GraphSerializerContractResolver.Instance
                 });
         }
         
-        internal string TranslateEntireQuery(GraphSetQueryConfiguration graphSetQueryConfiguration, List<IncludeDetail> includeDetails)
+        internal string TranslateEntireQuery(GraphSetQueryConfiguration graphSetQueryConfiguration, Type methodReturnType, List<IncludeDetail> includeDetails)
         {
             var queryTemplate = "{0} {1}{{ result: {2}{3} {{ {4} }} }}";
 
@@ -64,6 +64,14 @@ namespace LinqToGraphQL.Translator.Query
                 
                 queryInputs += ")";
             }
+
+            if (!includeDetails.Any(e => e.Type.IsPrimitive || e.Type.Name is "String"))
+            {
+                foreach (var property in methodReturnType.GetProperties().Where(e => e.PropertyType.IsPrimitive || e.PropertyType.Name is "String"))
+                {
+                    includeDetails.Add(new IncludeDetail(property.Name, property, property.PropertyType));
+                }
+            }
             
             string subIncludes = TranslateSubIncludes(includeDetails);
 
@@ -72,7 +80,7 @@ namespace LinqToGraphQL.Translator.Query
             if (_inputs.Any())
             {
                 variableDefinitions += "(";
-                foreach (((string inputName, InputDetail inputDetail), var inputArgumentIndex) in _inputs.Select((item, index) => (item, index)))
+                foreach (((string inputName, var inputDetail), var inputArgumentIndex) in _inputs.Select((item, index) => (item, index)))
                 {
                     var inputDetailType = inputDetail.Type.ToGraphQlType();
                     
@@ -99,6 +107,21 @@ namespace LinqToGraphQL.Translator.Query
             
             foreach ((var includeDetail, var includeDetailIndex) in includeDetails.Select((item, index) => (item, index)))
             {
+                if (!includeDetail.Includes.Any(e => e.Type.IsPrimitive || e.Type.Name is "String"))
+                {
+                    var properties = includeDetail.Type.GetProperties().Where(e => e.PropertyType.IsPrimitive || e.PropertyType.Name is "String");
+                    
+                    if (includeDetail.Type.IsGenericType)
+                    {
+                        properties = includeDetail.Type?.GetGenericArguments()?.FirstOrDefault()?.GetProperties().Where(e => (e.PropertyType.IsPrimitive || e.PropertyType.Name is "String") && !e.PropertyType.IsGenericType);
+                    } 
+                    
+                    foreach (var property in properties)
+                    {
+                        includeDetail.Includes.Add(new IncludeDetail(property.Name, property, property.PropertyType));
+                    }
+                }
+                
                 if (includeDetail.Attribute is MethodInfo methodInfo)
                 {
                     var includeTemplate = "{0}{1} {{ {2} }}";
@@ -127,8 +150,9 @@ namespace LinqToGraphQL.Translator.Query
                     
                     AttributesParserHelper.CheckMethodNameAttributes(ref includeDetailName, methodInfo);
                     
-                    currentQuery += string.Format(includeTemplate, includeDetailName, currentInputs, TranslateSubIncludes(includeDetail.Includes));
-                } else if (includeDetail.Attribute is PropertyInfo propertyInfo)
+                    currentQuery += $"{string.Format(includeTemplate, includeDetailName, currentInputs, TranslateSubIncludes(includeDetail.Includes))}{(includeDetailIndex != includeDetails.Count - 1 ? ", " : "")}";
+                } 
+                else if (includeDetail.Attribute is PropertyInfo propertyInfo)
                 {
                     if (!propertyInfo.PropertyType.IsPrimitive && propertyInfo.PropertyType.Name is not "String")
                     {

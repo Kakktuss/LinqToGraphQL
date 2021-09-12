@@ -65,14 +65,16 @@ namespace LinqToGraphQL.Context
             }
 
             var realQueryName = queryName;
+
+            var method = GetType().GetMethod(queryName);
             
-            AttributesParserHelper.CheckMethodNameAttributes(ref realQueryName, GetType().GetMethod(queryName));
+            AttributesParserHelper.CheckMethodNameAttributes(ref realQueryName, method);
 
             graphSetConfiguration.Query.Name = realQueryName;
             
             graphSetConfiguration.Query.Arguments = BuildSetCallerArgumentsDictionnary(parameterValues, queryName);
 
-            return new GraphSet<T>(new GraphQueryProvider(graphSetConfiguration, _clientFactorySingleton.HttpClientFactory.CreateClient("graph")));
+            return new GraphSet<T>(new GraphQueryProvider(graphSetConfiguration, method?.ReturnType.GenericTypeArguments.FirstOrDefault(), _clientFactorySingleton.HttpClientFactory.CreateClient("graph")));
         }
         
         private GraphContextConfigureOptions BuildConfigure()
