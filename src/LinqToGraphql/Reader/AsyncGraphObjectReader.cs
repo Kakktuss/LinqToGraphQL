@@ -12,10 +12,14 @@ namespace LinqToGraphQL.Reader
 	{
 		private readonly List<T> _items;
 
+		private readonly string _query;
+		
 		private readonly Task<HttpResponseMessage> _httpResponseMessage;
 		
-		internal AsyncGraphObjectReader(Task<HttpResponseMessage> httpResponseMessage)
+		internal AsyncGraphObjectReader(string query, Task<HttpResponseMessage> httpResponseMessage)
 		{
+			_query = query;
+			
 			_httpResponseMessage = httpResponseMessage;
 		}
 		
@@ -29,7 +33,7 @@ namespace LinqToGraphQL.Reader
 				
 				if (jsonDocument.RootElement.TryGetProperty("errors", out var errorElement))
 				{
-					throw new GraphQueryExecutionException(System.Text.Json.JsonSerializer.Deserialize<List<GraphQueryError>>(errorElement.GetRawText()));
+					throw new GraphQueryExecutionException(_query, System.Text.Json.JsonSerializer.Deserialize<List<GraphQueryError>>(errorElement.GetRawText()));
 				}
 
 				if (jsonDocument.RootElement.TryGetProperty("data", out var enumerableElement))
@@ -54,7 +58,7 @@ namespace LinqToGraphQL.Reader
 				}
 			} else
 			{
-				throw new GraphRequestExecutionException(httpResponseMessage);
+				throw new GraphRequestExecutionException(_query, httpResponseMessage);
 			}
 		}
 	}

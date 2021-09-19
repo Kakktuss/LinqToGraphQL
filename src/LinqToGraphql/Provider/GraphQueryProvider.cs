@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using LinqToGraphQL.Exceptions;
 using LinqToGraphQL.Reader;
 using LinqToGraphQL.Set;
 using LinqToGraphQL.Set.Configuration;
@@ -67,20 +68,21 @@ namespace LinqToGraphQL.Provider
 
 			System.Type elementType = TypeSystemHelper.GetElementType(expression.Type);
 
-			if (result.IsSuccessStatusCode)
+			if (result.Item2.IsSuccessStatusCode)
 			{
 				var graphObjectReader = Activator.CreateInstance(typeof(GraphObjectReader<>).MakeGenericType(elementType),
 					BindingFlags.Instance | BindingFlags.NonPublic, null,
 					new object[]
 					{
-						result
+						result.Item1,
+						result.Item2
 					},
 					null);
 				
 				return graphObjectReader;
 			}
-
-			throw new Exception("");
+			
+			throw new GraphRequestExecutionException(result.Item1, result.Item2);
 		}
 		
 		public TResult Execute<TResult>(Expression expression)
@@ -98,14 +100,15 @@ namespace LinqToGraphQL.Provider
 				BindingFlags.Instance | BindingFlags.NonPublic, null,
 				new object[]
 				{
-					result
+					result.Item1,
+					result.Item2
 				},
 				null);
 				
 			return graphObjectReader;
 		}
 
-		private HttpResponseMessage Request(Expression expression)
+		private (string, HttpResponseMessage) Request(Expression expression)
 		{
 			var httpRequestMessage = new HttpRequestMessage();
 			
@@ -115,10 +118,10 @@ namespace LinqToGraphQL.Provider
 			
 			ModifyRequestMessageConstraints(httpRequestMessage);
 			
-			return _graphHttpClient.Send(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead);
+			return (content, _graphHttpClient.Send(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead));
 		}
 
-		private Task<HttpResponseMessage> RequestAsync(Expression expression, CancellationToken cancellationToken = default)
+		private (string, Task<HttpResponseMessage>) RequestAsync(Expression expression, CancellationToken cancellationToken = default)
 		{
 			var httpRequestMessage = new HttpRequestMessage();
 
@@ -128,7 +131,7 @@ namespace LinqToGraphQL.Provider
 
 			ModifyRequestMessageConstraints(httpRequestMessage);
 			
-			return _graphHttpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+			return (content, _graphHttpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken));
 		}
 
 		private void ModifyRequestMessageConstraints(in HttpRequestMessage httpRequestMessage)
