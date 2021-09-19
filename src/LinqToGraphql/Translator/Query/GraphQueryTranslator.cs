@@ -65,6 +65,7 @@ namespace LinqToGraphQL.Translator.Query
                 queryInputs += ")";
             }
 
+            // Check if the query has primitive types Included; if not then add all primitive types into the selection set
             if (!includeDetails.Any(e => e.Type.IsPrimitive || e.Type.Name is "String"))
             {
                 foreach (var property in methodReturnType.GetProperties().Where(e => e.PropertyType.IsPrimitive || e.PropertyType.Name is "String"))
@@ -107,6 +108,7 @@ namespace LinqToGraphQL.Translator.Query
             
             foreach ((var includeDetail, var includeDetailIndex) in includeDetails.Select((item, index) => (item, index)))
             {
+                // Check if the sub include has primitive types Included; if not then add all primitive types into the selection set
                 if (!includeDetail.Includes.Any(e => e.Type.IsPrimitive || e.Type.Name is "String"))
                 {
                     var properties = includeDetail.Type.GetProperties().Where(e => e.PropertyType.IsPrimitive || e.PropertyType.Name is "String");

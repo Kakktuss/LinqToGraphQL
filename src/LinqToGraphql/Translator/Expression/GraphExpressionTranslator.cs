@@ -141,7 +141,7 @@ namespace LinqToGraphQL.Translator.Expression
 				{
 					if (!_includeTree.Exists(e => e.Name == node.Member.Name))
 					{
-						parentInclude = new IncludeDetail(node.Member.Name, node.Member, node.Member.ReflectedType);
+						parentInclude = new IncludeDetail(node.Member.Name, node.Member, node.Type);
 					
 						_includeTree.Add(parentInclude);
 					}
@@ -161,7 +161,7 @@ namespace LinqToGraphQL.Translator.Expression
 					{
 						if (!parentInclude.Includes.Exists(e => e.Name == node.Member.Name))
 						{
-							parentInclude.AddSubInclude(new IncludeDetail(node.Member.Name, node.Member, node.Member.ReflectedType));
+							parentInclude.AddSubInclude(new IncludeDetail(node.Member.Name, node.Member, node.Type));
 						}
 					}
 				}
