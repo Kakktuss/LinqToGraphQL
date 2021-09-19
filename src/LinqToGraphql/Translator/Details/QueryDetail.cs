@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace LinqToGraphQL.Translator.Details
 {
 	public class QueryDetail
 	{
-		[JsonPropertyName("query")]
+		[JsonProperty("query")]
 		public string Query { get; set; }
 		
-		[JsonPropertyName("variables")]
+		[JsonProperty("variables")]
 		public Dictionary<string, object> Variables { get; set; }
 	}
 }
