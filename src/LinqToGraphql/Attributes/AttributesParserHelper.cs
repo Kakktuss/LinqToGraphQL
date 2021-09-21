@@ -42,12 +42,12 @@ namespace LinqToGraphQL.Attributes
 
             var graphNameTranslatorBehaviorAttribute = parameterInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphNameBehaviorAttribute));
             
-            if (graphNameAttribute is not null)
+            if (graphNameAttribute is { })
             {
                 nodeName = (string) graphNameAttribute.ConstructorArguments.FirstOrDefault().Value;
             }
 
-            if (graphNameTranslatorBehaviorAttribute is not null)
+            if (graphNameTranslatorBehaviorAttribute is { })
             {
                 var graphNameTranslatorBehavior = (TranslatorBehavior) graphNameTranslatorBehaviorAttribute.ConstructorArguments.FirstOrDefault().Value;
 
@@ -72,17 +72,17 @@ namespace LinqToGraphQL.Attributes
 
             var graphNonNullablePropertyAttribute = parameterInfo.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphNonNullableParameterAttribute));
             
-            if (graphPropertyTypeAttribute is not null)
+            if (graphPropertyTypeAttribute is { })
             {
                 type = ((Type) graphPropertyTypeAttribute.ConstructorArguments.FirstOrDefault().Value)?.Name;
             }
             
-            if (graphPropertyTypeNameAttribute is not null)
+            if (graphPropertyTypeNameAttribute is { })
             {
                 type = ((Type) graphPropertyTypeNameAttribute.ConstructorArguments.FirstOrDefault().Value)?.Name;
             }
             
-            if (graphNonNullablePropertyAttribute is not null)
+            if (graphNonNullablePropertyAttribute is { })
             {
                 type = $"{type}!";
             }

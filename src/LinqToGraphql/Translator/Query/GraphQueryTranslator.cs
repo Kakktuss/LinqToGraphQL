@@ -49,7 +49,7 @@ namespace LinqToGraphQL.Translator.Query
 
             var queryInputs = "";
 
-            if (graphSetQueryConfiguration.Arguments.Any(e => e.Value.Item2 is not null))
+            if (graphSetQueryConfiguration.Arguments.Any(e => e.Value.Item2 is { }))
             {
                 queryInputs += "(";
                 
@@ -162,7 +162,7 @@ namespace LinqToGraphQL.Translator.Query
                         {
                             var propertyGenericArgument = propertyInfo.PropertyType.GetGenericArguments().FirstOrDefault();
 
-                            if (propertyGenericArgument is not null && (propertyGenericArgument.IsPrimitive || propertyGenericArgument.Name is "String"))
+                            if (propertyGenericArgument is { } && (propertyGenericArgument.IsPrimitive || propertyGenericArgument.Name is "String"))
                             {
                                 var genericIncludeDetailName = includeDetail.Name;
                                 

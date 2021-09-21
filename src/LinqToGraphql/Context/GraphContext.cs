@@ -37,7 +37,7 @@ namespace LinqToGraphQL.Context
             
             if (_configurations.Any(e => e.Key == typeof(T)))
             {
-                if (graphSetConfigurationAction is not null)
+                if (graphSetConfigurationAction is { })
                 {
                     GraphSetExistingConfigurationBuilder configurationBuilder = new GraphSetExistingConfigurationBuilder(_configurations.First(e => e.Key == typeof(T)).Value);
                     
@@ -50,7 +50,7 @@ namespace LinqToGraphQL.Context
                 }
             } else
             {
-                if (graphSetConfigurationAction is not null)
+                if (graphSetConfigurationAction is { })
                 {
                     GraphSetConfigurationBuilder configurationBuilder = new GraphSetConfigurationBuilder();
 

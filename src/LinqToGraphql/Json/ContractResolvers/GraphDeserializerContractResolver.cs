@@ -30,11 +30,11 @@ namespace LinqToGraphQL.Json
 			{
 				var graphDelegateValueAttribute = member.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphBackingFieldAttribute));
 
-				if (graphDelegateValueAttribute is not null)
+				if (graphDelegateValueAttribute is { })
 				{
 					var propertyBackingField = objectMembers.Where(e => e.Name == (string) graphDelegateValueAttribute.ConstructorArguments.FirstOrDefault().Value)?.FirstOrDefault();
 
-					if (propertyBackingField is not null)
+					if (propertyBackingField is { })
 					{
 						_methodBackingFields.Add(propertyBackingField.Name, member);
 					
@@ -61,12 +61,12 @@ namespace LinqToGraphQL.Json
 
 			var graphUnionTypeAttribute = member.GetCustomAttributesData().FirstOrDefault(e => e.AttributeType == typeof(GraphUnionTypePropertyAttribute));
 
-			if (graphNameAttribute is not null)
+			if (graphNameAttribute is { })
 			{
 				property.PropertyName = (string) graphNameAttribute.ConstructorArguments.FirstOrDefault().Value;
 			}
 
-			if (graphUnionTypeAttribute is not null)
+			if (graphUnionTypeAttribute is { })
 			{
 				var unionTypes = new List<Type>();
 				

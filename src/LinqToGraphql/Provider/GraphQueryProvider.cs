@@ -136,7 +136,7 @@ namespace LinqToGraphQL.Provider
 
 		private void ModifyRequestMessageConstraints(in HttpRequestMessage httpRequestMessage)
 		{
-			if (_graphSetConfiguration.Http is not null)
+			if (_graphSetConfiguration.Http is { })
 			{
 				httpRequestMessage.RequestUri = new Uri(_graphSetConfiguration.Http.RequestUri);
 
@@ -148,7 +148,7 @@ namespace LinqToGraphQL.Provider
 					}
 				}
 
-				if (_graphSetConfiguration.Http.Method is not null)
+				if (_graphSetConfiguration.Http.Method is { })
 				{
 					httpRequestMessage.Method = _graphSetConfiguration.Http.Method;
 				}

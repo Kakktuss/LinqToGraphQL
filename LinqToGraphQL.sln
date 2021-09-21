@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqToGraphql", "src\LinqToGraphql.csproj", "{CC2AE018-65DC-4A67-8F0F-51837C161F20}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4683E609-0138-44BB-B6BA-1C260FCEBD18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqToGraphqlExample", "example\LinqToGraphqlExample.csproj", "{6AE625C1-04EB-40C9-8400-3757595476B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqToGraphql", "src\LinqToGraphql\LinqToGraphql.csproj", "{4701D2BB-D43D-44C6-A401-ECDEDAA7889C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,5 +44,20 @@ Global
 		{6AE625C1-04EB-40C9-8400-3757595476B4}.Release|x64.Build.0 = Release|Any CPU
 		{6AE625C1-04EB-40C9-8400-3757595476B4}.Release|x86.ActiveCfg = Release|Any CPU
 		{6AE625C1-04EB-40C9-8400-3757595476B4}.Release|x86.Build.0 = Release|Any CPU
+		{4701D2BB-D43D-44C6-A401-ECDEDAA7889C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4701D2BB-D43D-44C6-A401-ECDEDAA7889C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4701D2BB-D43D-44C6-A401-ECDEDAA7889C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4701D2BB-D43D-44C6-A401-ECDEDAA7889C}.Debug|x64.Build.0 = Debug|Any CPU
+		{4701D2BB-D43D-44C6-A401-ECDEDAA7889C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4701D2BB-D43D-44C6-A401-ECDEDAA7889C}.Debug|x86.Build.0 = Debug|Any CPU
+		{4701D2BB-D43D-44C6-A401-ECDEDAA7889C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4701D2BB-D43D-44C6-A401-ECDEDAA7889C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4701D2BB-D43D-44C6-A401-ECDEDAA7889C}.Release|x64.ActiveCfg = Release|Any CPU
+		{4701D2BB-D43D-44C6-A401-ECDEDAA7889C}.Release|x64.Build.0 = Release|Any CPU
+		{4701D2BB-D43D-44C6-A401-ECDEDAA7889C}.Release|x86.ActiveCfg = Release|Any CPU
+		{4701D2BB-D43D-44C6-A401-ECDEDAA7889C}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4701D2BB-D43D-44C6-A401-ECDEDAA7889C} = {4683E609-0138-44BB-B6BA-1C260FCEBD18}
 	EndGlobalSection
 EndGlobal

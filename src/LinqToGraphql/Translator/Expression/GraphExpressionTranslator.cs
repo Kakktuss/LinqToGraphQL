@@ -68,11 +68,11 @@ namespace LinqToGraphQL.Translator.Expression
 							{
 								var listInitializer = listInitExpression.Initializers.FirstOrDefault();
 
-								if (listInitializer is not null)
+								if (listInitializer is { })
 								{
 									var firstArgument = listInitializer.Arguments.FirstOrDefault();
 
-									if (firstArgument is not null && firstArgument is MemberInitExpression firstArgumentMemberInitExpression)
+									if (firstArgument is { } && firstArgument is MemberInitExpression firstArgumentMemberInitExpression)
 									{
 										Visit(firstArgumentMemberInitExpression, $"{parent}.{memberAssignment.Member.Name}");
 									}
@@ -91,7 +91,7 @@ namespace LinqToGraphQL.Translator.Expression
 						parentInclude = parentInclude?.Includes.FirstOrDefault(e => e.Name == parentName);
 					}
 
-					if (parentInclude is not null)
+					if (parentInclude is { })
 					{
 						foreach (var binding in node.Bindings)
 						{
@@ -111,11 +111,11 @@ namespace LinqToGraphQL.Translator.Expression
 									{
 										var listInitializer = listInitExpression.Initializers.FirstOrDefault();
 
-										if (listInitializer is not null && listInitializer.Arguments.Any())
+										if (listInitializer is { } && listInitializer.Arguments.Any())
 										{
 											var firstArgument = listInitializer.Arguments.FirstOrDefault();
 
-											if (firstArgument is not null && firstArgument is MemberInitExpression firstArgumentMemberInitExpression)
+											if (firstArgument is { } && firstArgument is MemberInitExpression firstArgumentMemberInitExpression)
 											{
 												Visit(firstArgumentMemberInitExpression, $"{parent}.{memberAssignment.Member.Name}");
 											}
@@ -157,7 +157,7 @@ namespace LinqToGraphQL.Translator.Expression
 						parentInclude = parentInclude?.Includes.FirstOrDefault(e => e.Name == parentName);
 					}
 
-					if (parentInclude is not null)
+					if (parentInclude is { })
 					{
 						if (!parentInclude.Includes.Exists(e => e.Name == node.Member.Name))
 						{
@@ -249,6 +249,14 @@ namespace LinqToGraphQL.Translator.Expression
 							{
 								parentInclude.AddInput(new InputDetail($"{node.Method.Name}{char.ToUpper(methodParameter.Name[0])}{methodParameter.Name[1..]}".ToCamel(), methodParameter.ParameterType, methodParameter.Name, methodParameterValueConstantExpression.Value, methodParameter));
 							}
+
+							/*
+							 * TODO: Add support of Object-input sub construction
+							 * if (methodParameterValue is MemberInitExpression memberInitExpression)
+							 * {
+							 *		parentInclude.AddInput(new InputDetail($"{node.Method.Name}{char.ToUpper(methodParameter.Name[0])}{methodParameter.Name[1..]}".ToCamel(), methodParameter.ParameterType, methodParameter.Name, memberInitExpression, methodParameter));
+							 * }
+							 */
 						}
 						
 						_includeTree.Add(parentInclude);
@@ -265,7 +273,7 @@ namespace LinqToGraphQL.Translator.Expression
 						parentInclude = parentInclude?.Includes.FirstOrDefault(e => e.Name == parentName);
 					}
 
-					if (parentInclude is not null)
+					if (parentInclude is { })
 					{
 						if (!parentInclude.Includes.Exists(e => e.Name == node.Method.Name))
 						{
