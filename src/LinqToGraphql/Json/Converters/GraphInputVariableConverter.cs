@@ -103,7 +103,7 @@ namespace LinqToGraphQL.Json.Converters
 
 						if (declaredProperty.Value.Type == JTokenType.Object)
 						{
-							_writeObject(in writer, declaredProperty.Value, valueType);
+							_writeObject(in writer, declaredProperty.Value, objectProperty.PropertyType);
 						} else if (declaredProperty.Value.Type == JTokenType.Array)
 						{
 							_writeArray(in writer, declaredProperty.Value, objectProperty.PropertyType.GetGenericArguments().FirstOrDefault());
