@@ -57,6 +57,8 @@ namespace LinqToGraphQL.Translator.Query
                 {
                     var inputName = $"{queryArgumentName}";
 
+                    AttributesParserHelper.CheckMethodParameterNameAttributes(ref inputName, queryArgumentPropertyInfo);
+
                     queryInputs += $"{inputName}:${inputName}{(queryArgumentIndex != graphSetQueryConfiguration.Arguments.Count - 1 ? ", " : "")}";
                 
                     _inputs.Add(inputName, new InputDetail(inputName, queryArgumentValue.GetType(), queryArgumentName, queryArgumentValue, queryArgumentPropertyInfo));
