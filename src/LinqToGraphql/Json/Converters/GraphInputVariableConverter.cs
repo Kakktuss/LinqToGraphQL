@@ -34,7 +34,9 @@ namespace LinqToGraphQL.Json.Converters
 						// Check if the type is a GenericType
 						if (valueType.IsGenericType)
 						{
-							_writeArray(in writer, keyValue);
+							var jTokenArray = (JArray) JToken.FromObject(keyValue);
+							
+							_writeArray(in writer, jTokenArray, valueType.GetGenericArguments().FirstOrDefault());
 
 							continue;
 						} 
