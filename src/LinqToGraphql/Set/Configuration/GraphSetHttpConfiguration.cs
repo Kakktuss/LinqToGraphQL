@@ -10,16 +10,16 @@ namespace LinqToGraphQL.Set.Configuration
 		{
 			RequestUri = requestUri;
 
+			Method = method;
+			
 			Headers = headers ?? new HttpRequestMessage().Headers;
-
-			Method = method ?? HttpMethod.Get;
 		}
 		
 		internal string RequestUri { get; set; }
 
 		public HttpRequestHeaders Headers { get; set; }
 		
-		public HttpMethod Method { get; set; }
+		public HttpMethod? Method { get; set; }
 	}
 	#nullable disable
 }

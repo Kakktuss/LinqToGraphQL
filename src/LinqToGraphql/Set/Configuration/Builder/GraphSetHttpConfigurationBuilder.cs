@@ -7,8 +7,8 @@ namespace LinqToGraphQL.Set.Configuration.Builder
 	public class GraphSetHttpConfigurationBuilder
 	{
 		internal string RequestUri { get; set; }
-		
-		protected HttpMethod Method { get; set; } = HttpMethod.Get;
+
+		protected HttpMethod Method { get; set; }
 
 		protected HttpRequestHeaders Headers { get; set; } = new HttpRequestMessage().Headers;
 

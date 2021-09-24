@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net.Http;
 
 namespace LinqToGraphQL.Set.Configuration.Builder
 {
@@ -24,12 +25,6 @@ namespace LinqToGraphQL.Set.Configuration.Builder
 				_graphSetConfiguration.Http.RequestUri = Url;
 			}
 
-			// Http configuration
-			if (graphSetHttpConfiguration.Method != _graphSetConfiguration.Http.Method)
-			{
-				_graphSetConfiguration.Http.Method = graphSetHttpConfiguration.Method;
-			}
-
 			if (graphSetHttpConfiguration.Headers.Any())
 			{
 				foreach (var header in graphSetHttpConfiguration.Headers)
@@ -38,7 +33,10 @@ namespace LinqToGraphQL.Set.Configuration.Builder
 				}
 			}
 
-			if (graphSetHttpConfiguration.Method != _graphSetConfiguration.Http.Method)
+			if (graphSetHttpConfiguration.Method is null && _graphSetConfiguration.Http.Method is null)
+			{
+				_graphSetConfiguration.Http.Method = HttpMethod.Get;
+			} else if (graphSetHttpConfiguration.Method is not null && graphSetHttpConfiguration.Method != _graphSetConfiguration.Http.Method)
 			{
 				_graphSetConfiguration.Http.Method = graphSetHttpConfiguration.Method;
 			}

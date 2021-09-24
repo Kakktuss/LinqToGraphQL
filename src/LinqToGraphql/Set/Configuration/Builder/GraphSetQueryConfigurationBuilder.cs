@@ -2,7 +2,7 @@
 {
 	public class GraphSetQueryConfigurationBuilder
 	{
-		protected GraphSetTypes Type = GraphSetTypes.Query;
+		protected GraphSetTypes Type;
 
 		public GraphSetQueryConfigurationBuilder WithType(GraphSetTypes type)
 		{

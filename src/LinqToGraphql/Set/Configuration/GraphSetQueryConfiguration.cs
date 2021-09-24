@@ -6,11 +6,11 @@ namespace LinqToGraphQL.Set.Configuration
 {
 	public class GraphSetQueryConfiguration
 	{
-		public GraphSetQueryConfiguration(GraphSetTypes type)
+		public GraphSetQueryConfiguration(GraphSetTypes? type = null)
 		{
 			Arguments = new();
 
-			Type = type;
+			Type = type ?? GraphSetTypes.Query;
 		}
 		
 		internal string Name { get; set; }
