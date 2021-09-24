@@ -129,7 +129,7 @@ namespace LinqToGraphQL.Provider
 			
 			httpRequestMessage.Content = new StringContent(content, Encoding.UTF8, "application/json");
 
-			ModifyRequestMessageConstraints(httpRequestMessage);
+			ModifyRequestMessageConstraints(in httpRequestMessage);
 			
 			return (content, _graphHttpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken));
 		}

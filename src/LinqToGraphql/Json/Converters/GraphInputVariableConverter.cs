@@ -107,7 +107,15 @@ namespace LinqToGraphQL.Json.Converters
 						} else if (declaredProperty.Value.Type == JTokenType.Array)
 						{
 							_writeArray(in writer, declaredProperty.Value, objectProperty.PropertyType.GetGenericArguments().FirstOrDefault());
-						} else
+						} else if (objectProperty.PropertyType.IsEnum)
+						{
+							var enumValues = objectProperty.PropertyType.GetEnumValues();
+
+							var sub = enumValues.GetValue(declaredProperty.Value.Value<int>());
+							
+							writer.WriteValue(sub.ToString());
+						}
+						else
 						{
 							writer.WriteValue(declaredProperty.Value);
 						}

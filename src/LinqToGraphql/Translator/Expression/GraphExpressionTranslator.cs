@@ -56,25 +56,28 @@ namespace LinqToGraphQL.Translator.Expression
 					{
 						if (binding is MemberAssignment memberAssignment)
 						{
-							if (!_includeTree.Exists(e => e.Name == memberAssignment.Member.Name))
+							if (binding.Member is PropertyInfo propertyInfo)
 							{
-								_includeTree.Add(new IncludeDetail(memberAssignment.Member.Name, memberAssignment.Member, memberAssignment.Member.ReflectedType));
-							}
-							
-							if (memberAssignment.Expression is MemberInitExpression memberInitExpression)
-							{
-								Visit(memberInitExpression, $"{parent}.{memberAssignment.Member.Name}");
-							} else if (memberAssignment.Expression is ListInitExpression listInitExpression)
-							{
-								var listInitializer = listInitExpression.Initializers.FirstOrDefault();
-
-								if (listInitializer is { })
+								if (!_includeTree.Exists(e => e.Name == propertyInfo.Name))
 								{
-									var firstArgument = listInitializer.Arguments.FirstOrDefault();
+									_includeTree.Add(new IncludeDetail(propertyInfo.Name, propertyInfo, propertyInfo.PropertyType));
+								}
+							
+								if (memberAssignment.Expression is MemberInitExpression memberInitExpression)
+								{
+									Visit(memberInitExpression, $"{propertyInfo.Name}");
+								} else if (memberAssignment.Expression is ListInitExpression listInitExpression)
+								{
+									var listInitializer = listInitExpression.Initializers.FirstOrDefault();
 
-									if (firstArgument is { } && firstArgument is MemberInitExpression firstArgumentMemberInitExpression)
+									if (listInitializer is { })
 									{
-										Visit(firstArgumentMemberInitExpression, $"{parent}.{memberAssignment.Member.Name}");
+										var firstArgument = listInitializer.Arguments.FirstOrDefault();
+
+										if (firstArgument is { } && firstArgument is MemberInitExpression firstArgumentMemberInitExpression)
+										{
+											Visit(firstArgumentMemberInitExpression, $"{propertyInfo.Name}");
+										}
 									}
 								}
 							}
@@ -97,27 +100,30 @@ namespace LinqToGraphQL.Translator.Expression
 						{
 							if (binding is MemberAssignment memberAssignment)
 							{
-								if (!parentInclude.Includes.Exists(e => e.Name == memberAssignment.Member.Name))
+								if (memberAssignment.Member is PropertyInfo propertyInfo)
 								{
-									parentInclude.AddSubInclude(new IncludeDetail(memberAssignment.Member.Name, memberAssignment.Member, memberAssignment.Member.ReflectedType));
-								}
-								
-								if (memberAssignment.Expression is MemberInitExpression memberInitExpression)
-								{
-									Visit(memberInitExpression, $"{parent}.{memberAssignment.Member.Name}");
-								} else if (memberAssignment.Expression is ListInitExpression listInitExpression)
-								{
-									if (listInitExpression.Initializers.Any())
+									if (!parentInclude.Includes.Exists(e => e.Name == propertyInfo.Name))
 									{
-										var listInitializer = listInitExpression.Initializers.FirstOrDefault();
-
-										if (listInitializer is { } && listInitializer.Arguments.Any())
+										parentInclude.AddSubInclude(new IncludeDetail(propertyInfo.Name, memberAssignment.Member, propertyInfo.PropertyType));
+									}
+								
+									if (memberAssignment.Expression is MemberInitExpression memberInitExpression)
+									{
+										Visit(memberInitExpression, $"{parent}.{propertyInfo.Name}");
+									} else if (memberAssignment.Expression is ListInitExpression listInitExpression)
+									{
+										if (listInitExpression.Initializers.Any())
 										{
-											var firstArgument = listInitializer.Arguments.FirstOrDefault();
+											var listInitializer = listInitExpression.Initializers.FirstOrDefault();
 
-											if (firstArgument is { } && firstArgument is MemberInitExpression firstArgumentMemberInitExpression)
+											if (listInitializer is { } && listInitializer.Arguments.Any())
 											{
-												Visit(firstArgumentMemberInitExpression, $"{parent}.{memberAssignment.Member.Name}");
+												var firstArgument = listInitializer.Arguments.FirstOrDefault();
+
+												if (firstArgument is { } && firstArgument is MemberInitExpression firstArgumentMemberInitExpression)
+												{
+													Visit(firstArgumentMemberInitExpression, $"{parent}.{propertyInfo.Name}");
+												}
 											}
 										}
 									}

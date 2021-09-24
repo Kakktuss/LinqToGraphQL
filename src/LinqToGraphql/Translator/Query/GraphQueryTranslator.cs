@@ -66,9 +66,9 @@ namespace LinqToGraphQL.Translator.Query
             }
 
             // Check if the query has primitive types Included; if not then add all primitive types into the selection set
-            if (!includeDetails.Any(e => e.Type.IsPrimitive || e.Type.Name is "String"))
+            if (!includeDetails.Any(e => e.Type.IsPrimitive || e.Type.Name is "String" || e.Type.Name is "DateTime"))
             {
-                foreach (var property in methodReturnType.GetProperties().Where(e => e.PropertyType.IsPrimitive || e.PropertyType.Name is "String"))
+                foreach (var property in methodReturnType.GetProperties().Where(e => e.PropertyType.IsPrimitive || e.PropertyType.Name is "String" || e.PropertyType.Name is "DateTime"))
                 {
                     includeDetails.Add(new IncludeDetail(property.Name, property, property.PropertyType));
                 }
@@ -109,13 +109,13 @@ namespace LinqToGraphQL.Translator.Query
             foreach ((var includeDetail, var includeDetailIndex) in includeDetails.Select((item, index) => (item, index)))
             {
                 // Check if the sub include has primitive types Included; if not then add all primitive types into the selection set
-                if (!includeDetail.Includes.Any(e => e.Type.IsPrimitive || e.Type.Name is "String"))
+                if (!includeDetail.Includes.Any(e => e.Type.IsPrimitive || e.Type.Name is "String" || e.Type.Name is "DateTime"))
                 {
-                    var properties = includeDetail.Type.GetProperties().Where(e => e.PropertyType.IsPrimitive || e.PropertyType.Name is "String");
+                    var properties = includeDetail.Type.GetProperties().Where(e => e.PropertyType.IsPrimitive || e.PropertyType.Name is "String" || e.PropertyType.Name is "DateTime");
                     
                     if (includeDetail.Type.IsGenericType)
                     {
-                        properties = includeDetail.Type?.GetGenericArguments()?.FirstOrDefault()?.GetProperties().Where(e => (e.PropertyType.IsPrimitive || e.PropertyType.Name is "String") && !e.PropertyType.IsGenericType);
+                        properties = includeDetail.Type?.GetGenericArguments()?.FirstOrDefault()?.GetProperties().Where(e => (e.PropertyType.IsPrimitive || e.PropertyType.Name is "String"  || e.PropertyType.Name is "DateTime") && !e.PropertyType.IsGenericType);
                     } 
                     
                     foreach (var property in properties)
@@ -156,13 +156,13 @@ namespace LinqToGraphQL.Translator.Query
                 } 
                 else if (includeDetail.Attribute is PropertyInfo propertyInfo)
                 {
-                    if (!propertyInfo.PropertyType.IsPrimitive && propertyInfo.PropertyType.Name is not "String")
+                    if (!propertyInfo.PropertyType.IsPrimitive && propertyInfo.PropertyType.Name is not "String" && propertyInfo.PropertyType.Name is not "DateTime")
                     {
                         if (propertyInfo.PropertyType.IsGenericType)
                         {
                             var propertyGenericArgument = propertyInfo.PropertyType.GetGenericArguments().FirstOrDefault();
 
-                            if (propertyGenericArgument is { } && (propertyGenericArgument.IsPrimitive || propertyGenericArgument.Name is "String"))
+                            if (propertyGenericArgument is { } && (propertyGenericArgument.IsPrimitive || propertyGenericArgument.Name is "String" || propertyGenericArgument.Name is "DateTime"))
                             {
                                 var genericIncludeDetailName = includeDetail.Name;
                                 
