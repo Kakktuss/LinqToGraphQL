@@ -2,13 +2,12 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>TestClient</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\src\LinqToGraphql.csproj" />
-        <ProjectReference Include="..\src\LinqToGraphql\LinqToGraphql.csproj" />
+      <ProjectReference Include="..\src\LinqToGraphql\LinqToGraphql.csproj" />
     </ItemGroup>
 
 </Project>
