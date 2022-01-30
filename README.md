@@ -518,14 +518,4 @@ And another special thanks to [@Mattwar](https://github.com/mattwar) with his gi
 <!-- CONTACT -->
 ## Contact
 
-Benjamin Mandervelde - [@kakktuss](https://twitter.com/Kakktuss) - benjaminmanderveldepro@gmail.com
-
-
-### Hi there 👋
-
-Hi, I'm Kaktus, a 18 years old back-end developer passionate about programming since i'm 10 and for the last two years i mainly focus on learning back-end architecture & microservices design  !
-I am also passionate about science, new technologies and entrepreneuship.
-
-### What I am focusing on 👀
-<https://img.shields.io/badge/csharp-C%23-blueviolet?style=for-the-badge&logo=csharp>
-I work mainly with the C
+Benjamin Mandervelde - [@kakktuss](https://twitter.com/Kakktuss) - benjaminmanderveldedev@protonmail.com
