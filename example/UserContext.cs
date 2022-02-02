@@ -15,7 +15,7 @@ namespace TestClient
 	{
 		[GraphName("user")]
 		[GraphNameBehavior(TranslatorBehavior.UpperCase)]
-		public GraphSet<User.User> User([GraphNonNullableParameter] UserInput input)
+		public GraphSet<User.User> GetUser([GraphNonNullableParameter] UserInput input)
 		{
 			return Set<User.User>(new object[]
 			{

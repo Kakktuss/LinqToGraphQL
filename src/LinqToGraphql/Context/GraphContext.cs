@@ -14,7 +14,7 @@ using LinqToGraphQL.Set.Configuration.Builder;
 
 namespace LinqToGraphQL.Context
 {
-    public class GraphContext
+    public class GraphContext : IDisposable
     {
         protected IDictionary<string, object> ContextArguments;
         
@@ -100,6 +100,19 @@ namespace LinqToGraphQL.Context
                 };
             }).ToDictionary(arg => arg.Name, arg => arg.Value);
             return arguments;
+        }
+
+        private bool _disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            _disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

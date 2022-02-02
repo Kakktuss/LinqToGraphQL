@@ -12,7 +12,21 @@ namespace TestClient
 		{
 			var userContext = new UserContext();
 
-			IQueryable<User.User> userQuery = userContext.User( new UserInput
+
+			IQueryable<User.User> userQuery2 = userContext.GetUser(new UserInput
+			{
+				Name = "test",
+				Description = "est"
+			})
+				.Select(e => new User.User
+				{
+					Name = e.Name,
+					Username = e.Username
+				})
+				.Include(e => e.Posts(1));
+
+			/**
+			 * IQueryable<User.User> userQuery = userContext.GetUser( new UserInput
 				{
 					Name = "test",
 					Description = "est"
@@ -34,12 +48,13 @@ namespace TestClient
 							Content = e.Content,
 							Title = e.Title
 						});
+			 */
 			
-			Console.WriteLine(userQuery.ToString());
+			Console.WriteLine(userQuery2.ToString());
 
-			var user = userQuery.ToItem();
+			// var user = userQuery.ToItem();
 			
-			Console.WriteLine(user);
+			//Console.WriteLine(user);
 		}
 	}
 }

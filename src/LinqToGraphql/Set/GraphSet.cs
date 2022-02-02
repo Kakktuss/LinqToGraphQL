@@ -8,7 +8,7 @@ using LinqToGraphQL.Provider;
 
 namespace LinqToGraphQL.Set
 {
-	public class GraphSet<T> : IQueryable<T>, IAsyncEnumerable<T>
+	public class GraphSet<T> : IQueryable<T>, IAsyncEnumerable<T>, IDisposable
 	{
 		
 		private readonly GraphQueryProvider _provider;
@@ -79,6 +79,26 @@ namespace LinqToGraphQL.Set
 		public override string ToString()
 		{
 			return _provider.GetQueryText(Expression);
+		}
+
+		private bool _disposed = false;
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!_disposed)
+			{
+				if (disposing)
+				{
+					_provider?.Dispose();
+				}
+			}
+			_disposed = true;
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 	}
 }

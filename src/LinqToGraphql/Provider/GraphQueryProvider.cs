@@ -17,7 +17,7 @@ using LinqToGraphQL.Types;
 
 namespace LinqToGraphQL.Provider
 {
-	public class GraphQueryProvider : IQueryProvider
+	public class GraphQueryProvider : IQueryProvider, IDisposable
 	{
 
 		private readonly GraphSetConfiguration _graphSetConfiguration;
@@ -162,6 +162,26 @@ namespace LinqToGraphQL.Provider
 			var queryTranslate = new GraphQueryTranslator().Translate(_graphSetConfiguration.Query, _methodReturnType, includeDetails);
 			
 			return queryTranslate;
+		}
+
+		private bool _disposed = false;
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!_disposed)
+			{
+				if (disposing)
+				{
+					_graphHttpClient?.Dispose();
+				}
+			}
+			_disposed = true;
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 	}
 }
