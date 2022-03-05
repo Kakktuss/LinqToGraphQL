@@ -12,7 +12,7 @@ namespace LinqToGraphQL.Set
 	{
 		
 		private readonly GraphQueryProvider _provider;
-		private readonly Expression _expression;
+		private Expression? _expression;
 
 		public GraphSet(GraphQueryProvider provider)
 		{
@@ -39,16 +39,25 @@ namespace LinqToGraphQL.Set
 
 		IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
+			if(_disposed)
+				throw new ObjectDisposedException(nameof(GraphSet<T>));
+			
 			return ((IEnumerable<T>) _provider.Execute(_expression)).GetEnumerator();
 		}
 
 		public IEnumerator GetEnumerator()
 		{
+			if(_disposed)
+				throw new ObjectDisposedException(nameof(GraphSet<T>));
+			
 			return ((IEnumerable) _provider.Execute(_expression)).GetEnumerator();
 		}
 		
 		public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
 		{
+			if(_disposed)
+				throw new ObjectDisposedException(nameof(GraphSet<T>));
+			
 			return ((IAsyncEnumerable<T>) _provider.ExecuteAsync(_expression, cancellationToken)).GetAsyncEnumerator(cancellationToken);
 		}
 
@@ -85,12 +94,10 @@ namespace LinqToGraphQL.Set
 
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_disposed)
+			if (!_disposed && disposing)
 			{
-				if (disposing)
-				{
-					_provider?.Dispose();
-				}
+				_provider?.Dispose();
+				_expression = null;
 			}
 			_disposed = true;
 		}

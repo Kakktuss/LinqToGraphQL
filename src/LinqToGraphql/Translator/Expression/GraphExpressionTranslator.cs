@@ -8,7 +8,7 @@ using LinqToGraphQL.Translator.Details;
 
 namespace LinqToGraphQL.Translator.Expression
 {
-	public class GraphExpressionTranslator
+	public class GraphExpressionTranslator : IDisposable
 	{
 		
 		private readonly List<IncludeDetail> _includeTree;
@@ -317,5 +317,22 @@ namespace LinqToGraphQL.Translator.Expression
 			return e;
 		}
 
+		private bool _disposed = false;
+
+		public void Dispose(bool disposing)
+		{
+			if (!_disposed && disposing)
+			{
+				_includeTree.Clear();
+			}
+
+			_disposed = true;
+		}
+		
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 	}
 }

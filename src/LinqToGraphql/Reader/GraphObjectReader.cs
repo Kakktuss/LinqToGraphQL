@@ -56,5 +56,23 @@ namespace LinqToGraphQL.Reader
 		{
 			return GetEnumerator();
 		}
+		
+		private bool _disposed;
+		
+		public void Dispose(bool disposing)
+		{
+			if (!_disposed && disposing)
+			{
+				_httpResponseMessage.Dispose();
+			}
+
+			_disposed = true;
+		}
+		
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 	}
 }

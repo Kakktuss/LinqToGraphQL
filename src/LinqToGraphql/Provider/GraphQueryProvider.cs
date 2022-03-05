@@ -15,14 +15,15 @@ using LinqToGraphQL.Translator.Expression;
 using LinqToGraphQL.Translator.Query;
 using LinqToGraphQL.Types;
 
+#nullable enable
 namespace LinqToGraphQL.Provider
 {
 	public class GraphQueryProvider : IQueryProvider, IDisposable
 	{
 
-		private readonly GraphSetConfiguration _graphSetConfiguration;
+		private GraphSetConfiguration? _graphSetConfiguration;
 
-		private readonly Type _methodReturnType;
+		private Type? _methodReturnType;
 		
 		private readonly HttpClient _graphHttpClient;
 
@@ -136,7 +137,10 @@ namespace LinqToGraphQL.Provider
 
 		private void ModifyRequestMessageConstraints(in HttpRequestMessage httpRequestMessage)
 		{
-			if (_graphSetConfiguration.Http is { })
+			if (_disposed)
+				throw new ObjectDisposedException(nameof(GraphQueryProvider));
+			
+			if (_graphSetConfiguration!.Http is { })
 			{
 				httpRequestMessage.RequestUri = new Uri(_graphSetConfiguration.Http.RequestUri);
 
@@ -157,9 +161,14 @@ namespace LinqToGraphQL.Provider
 
 		private string Translate(Expression expression)
 		{
-			var includeDetails = new GraphExpressionTranslator().Translate(expression);
+			if (_disposed)
+				throw new ObjectDisposedException(nameof(GraphQueryProvider));
+			
+			using var graphExpressionTranslator = new GraphExpressionTranslator();
 
-			var queryTranslate = new GraphQueryTranslator().Translate(_graphSetConfiguration.Query, _methodReturnType, includeDetails);
+			using var graphQueryTranslator = new GraphQueryTranslator();
+			
+			var queryTranslate = graphQueryTranslator.Translate(_graphSetConfiguration!.Query, _methodReturnType, graphExpressionTranslator.Translate(expression));
 			
 			return queryTranslate;
 		}
@@ -168,13 +177,12 @@ namespace LinqToGraphQL.Provider
 
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_disposed)
+			if (!_disposed && disposing)
 			{
-				if (disposing)
-				{
-					_graphHttpClient?.Dispose();
-				}
+				_graphSetConfiguration = null;
+				_methodReturnType = null;
 			}
+			
 			_disposed = true;
 		}
 
@@ -185,3 +193,4 @@ namespace LinqToGraphQL.Provider
 		}
 	}
 }
+#nullable disable

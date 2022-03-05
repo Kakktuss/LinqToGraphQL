@@ -9,10 +9,8 @@ using LinqToGraphQL.Extensions;
 
 namespace LinqToGraphQL.Reader
 {
-	public class AsyncGraphObjectReader<T> : IAsyncEnumerable<T>
+	public class AsyncGraphObjectReader<T> : IAsyncEnumerable<T>, IDisposable
 	{
-		private readonly List<T> _items;
-
 		private readonly string _query;
 		
 		private readonly Task<HttpResponseMessage> _httpResponseMessage;
@@ -26,6 +24,9 @@ namespace LinqToGraphQL.Reader
 		
 		public async IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
 		{
+			if(_disposed)
+				throw new ObjectDisposedException(nameof(AsyncGraphObjectReader<T>));
+			
 			var httpResponseMessage = await _httpResponseMessage;
 			
 			if (httpResponseMessage.IsSuccessStatusCode)
@@ -61,6 +62,24 @@ namespace LinqToGraphQL.Reader
 			{
 				throw new GraphRequestExecutionException(_query, httpResponseMessage);
 			}
+		}
+
+		private bool _disposed;
+		
+		public void Dispose(bool disposing)
+		{
+			if (!_disposed && disposing)
+			{
+				_httpResponseMessage.Dispose();
+			}
+
+			_disposed = true;
+		}
+		
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 	}
 }

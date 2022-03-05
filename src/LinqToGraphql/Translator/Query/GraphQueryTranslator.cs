@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace LinqToGraphQL.Translator.Query
 {
-    public class GraphQueryTranslator
+    public class GraphQueryTranslator : IDisposable
     {
 
         private readonly Dictionary<string, InputDetail> _inputs;
@@ -203,6 +203,13 @@ namespace LinqToGraphQL.Translator.Query
             
             return currentQuery;
         }
-
+        
+		private bool _disposed = false;
+        
+        public void Dispose()
+		{
+            _disposed = true;
+			GC.SuppressFinalize(this);
+		}
     }
 }

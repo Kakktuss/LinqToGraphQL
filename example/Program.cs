@@ -10,7 +10,7 @@ namespace TestClient
 	{
 		static void Main(string[] args)
 		{
-			var userContext = new UserContext();
+			using var userContext = new UserContext();
 
 
 			IQueryable<User.User> userQuery2 = userContext.GetUser(new UserInput
@@ -50,7 +50,17 @@ namespace TestClient
 						});
 			 */
 			
-			Console.WriteLine(userQuery2.ToString());
+			for (var x = 0; x <= 10; x++)
+			{
+				try
+				{
+					Console.WriteLine(userQuery2.ToItem());
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine(e);
+				}
+			}
 
 			// var user = userQuery.ToItem();
 			

@@ -24,8 +24,8 @@ namespace LinqToGraphQL.Context
 
         protected GraphContext(IDictionary<string, object> contextArguments = null)
         {
-            ContextArguments = contextArguments;
-            
+            ContextArguments = contextArguments ?? new Dictionary<string, object>();
+
             _clientFactorySingleton = ClientFactorySingleton.Instance;
 
             _configurations = BuildConfigure().Configurations;
@@ -33,7 +33,10 @@ namespace LinqToGraphQL.Context
         
         public GraphSet<T> Set<T>(object[] parameterValues = null, Action<GraphSetConfigurationBuilder> graphSetConfigurationAction = null, [CallerMemberName] string queryName = "")
         {
-            GraphSetConfiguration graphSetConfiguration = new(default, default, default);
+            if(_disposed)
+                throw new ObjectDisposedException(nameof(GraphContext));
+
+            GraphSetConfiguration graphSetConfiguration;
             
             if (_configurations.Any(e => e.Key == typeof(T)))
             {
@@ -104,8 +107,14 @@ namespace LinqToGraphQL.Context
 
         private bool _disposed = false;
 
-        protected virtual void Dispose(bool disposing)
+        protected void Dispose(bool disposing)
         {
+            if (!_disposed && disposing)
+            {
+                _configurations.Clear();
+                ContextArguments.Clear();
+            }
+            
             _disposed = true;
         }
 
